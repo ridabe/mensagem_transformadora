@@ -1,0 +1,366 @@
+# PROMPT POR MÓDULOS — PROJETO MENSAGEM TRANSFORMADORA
+
+Você é um engenheiro de software sênior especialista em React Native, Expo, TypeScript, arquitetura mobile offline-first, SQLite local, geração de PDF e organização modular de projetos.
+
+Estamos desenvolvendo um aplicativo Android chamado **Mensagem Transformadora**, que funciona 100% offline, sem login, sem backend e com persistência local em SQLite.
+
+---
+
+# DOCUMENTAÇÃO OBRIGATÓRIA
+
+Dentro da pasta `docs` existem dois arquivos que devem ser usados como base principal para toda a implementação:
+
+* `docs/spec.md`
+* `docs/prd.md`
+
+Esses arquivos contêm:
+
+* regras de negócio
+* requisitos funcionais
+* requisitos não funcionais
+* visão do produto
+* arquitetura esperada
+* entidades principais
+* escopo oficial do projeto
+
+Antes de qualquer implementação, leia e utilize esses dois arquivos como fonte principal da verdade do sistema.
+
+Se existir qualquer divergência entre alguma suposição técnica e o conteúdo desses arquivos, sempre prevalece o que estiver definido em:
+
+* `docs/spec.md`
+* `docs/prd.md`
+
+---
+
+# LOGO OFICIAL DO SISTEMA
+
+Na raiz do projeto existe uma pasta chamada:
+
+`/img`
+
+Dentro dela existe o arquivo PNG oficial do logo do sistema.
+
+Esse logo deve ser utilizado em TODAS as telas do aplicativo.
+
+Regras importantes sobre o uso do logo:
+
+* deve aparecer no canto superior esquerdo de todas as telas
+* deve manter proporção correta
+* deve ter tamanho pequeno e profissional
+* não deve ocupar muito espaço visual
+* deve seguir padrão elegante e discreto
+* deve compor a identidade visual do sistema
+* deve respeitar boas práticas de UI/UX mobile
+
+Não utilizar tamanhos exagerados.
+
+O objetivo é que o logo funcione como identidade visual constante do app.
+
+---
+
+# STACK OBRIGATÓRIA
+
+Utilizar obrigatoriamente:
+
+* React Native
+* Expo
+* TypeScript
+* SQLite local
+* Arquitetura modular
+* Navegação limpa
+* Código organizado
+* Componentização reutilizável
+
+Não utilizar:
+
+* Flutter
+* Supabase
+* Firebase
+* APIs externas
+* autenticação
+* backend
+* banco em nuvem
+
+O sistema deve funcionar totalmente offline.
+
+---
+
+# FUNCIONALIDADES DO APP
+
+O sistema deve permitir:
+
+1. Criar nova anotação de pregação
+2. Salvar localmente
+3. Editar mensagens
+4. Excluir mensagens
+5. Duplicar mensagens
+6. Favoritar mensagens
+7. Listar histórico
+8. Pesquisar mensagens
+9. Gerar resumo automático local
+10. Exportar PDF
+11. Dashboard local com estatísticas
+
+---
+
+# ESTRUTURA DOS DADOS
+
+Cada pregação deve conter:
+
+* id
+* nome do usuário
+* nome do pregador
+* nome da igreja
+* data automática
+* horário opcional
+* título da pregação
+* versículo base
+* versículos secundários
+* introdução
+* pontos principais
+* frases marcantes
+* observações pessoais
+* aplicações práticas
+* conclusão
+* resumo final
+* favorito
+* createdAt
+* updatedAt
+
+---
+
+# REGRAS DE ENTREGA
+
+Todo código deve ser entregue:
+
+* completo
+* funcional
+* sem pseudocódigo
+* sem placeholders vagos
+* sem trechos incompletos
+* com nomes de arquivos
+* com estrutura de pastas
+* com explicação objetiva
+* com arquitetura limpa
+* pronto para APK Android
+
+Sempre reutilizar componentes quando possível.
+
+Sempre respeitar a documentação da pasta `docs`.
+
+---
+
+# ORDEM CORRETA DOS MÓDULOS
+
+Abaixo está a ordem lógica correta de desenvolvimento do projeto.
+
+Cada módulo deve ser desenvolvido separadamente.
+
+---
+
+# MÓDULO 1 — ESTRUTURA BASE DO PROJETO
+
+Crie a estrutura base profissional do app React Native + Expo + TypeScript chamado **Mensagem Transformadora**.
+
+Quero:
+
+* estrutura de pastas profissional
+* organização modular
+* navegação entre telas
+* configuração inicial
+* tema visual
+* componentes reutilizáveis base
+* header padrão com logo no canto superior esquerdo
+* layout base reutilizável
+* botão flutuante para nova mensagem
+* preparação para SQLite
+* preparação para geração de PDF
+* telas vazias iniciais:
+
+  * Home
+  * Nova Mensagem
+  * Detalhes
+  * Editar
+  * Dashboard
+
+A UI deve ser limpa, moderna, elegante e leve.
+
+---
+
+# MÓDULO 2 — BANCO LOCAL E PERSISTÊNCIA
+
+Implemente o módulo de persistência local usando SQLite.
+
+Quero:
+
+* criação do banco local
+* criação das tabelas
+* migrations iniciais
+* repositories
+* CRUD completo
+* TypeScript types
+* funções para:
+
+  * salvar
+  * listar
+  * buscar
+  * atualizar
+  * excluir
+  * favoritar
+  * duplicar
+
+Também implementar suporte para:
+
+* pontos principais
+* versículos secundários
+* favoritos
+
+Código completo e pronto para produção.
+
+---
+
+# MÓDULO 3 — TELA DE CRIAÇÃO DE PREGAÇÃO
+
+Implemente a tela completa de criação de pregação.
+
+Quero:
+
+Formulário com:
+
+* nome do usuário
+* nome do pregador
+* igreja
+* data automática
+* horário opcional
+* título da pregação
+* versículo base
+* versículos secundários dinâmicos
+* introdução
+* pontos principais dinâmicos
+* frases marcantes
+* observações pessoais
+* aplicações práticas
+* conclusão
+
+A tela deve:
+
+* usar o logo no topo
+* ser organizada por seções
+* ter UX excelente
+* salvar localmente via SQLite
+
+---
+
+# MÓDULO 4 — LISTAGEM E BUSCA
+
+Implemente o módulo de listagem e busca.
+
+Quero:
+
+* tela inicial com histórico
+* cards bonitos e organizados
+* ordenação da mais recente para mais antiga
+* busca por:
+
+  * título
+  * pregador
+  * igreja
+  * versículo
+
+Também:
+
+* indicador visual de favorito
+* navegação para detalhes
+* botão flutuante para nova mensagem
+
+Tudo usando dados locais.
+
+---
+
+# MÓDULO 5 — DETALHES, EDIÇÃO E AÇÕES
+
+Implemente:
+
+* tela de detalhes completa
+* tela de edição
+* botão editar
+* botão excluir com confirmação
+* botão duplicar
+* botão favoritar/desfavoritar
+
+Reutilizar o formulário de criação quando possível.
+
+Tudo persistido localmente.
+
+---
+
+# MÓDULO 6 — RESUMO AUTOMÁTICO LOCAL
+
+Implemente o módulo de resumo automático.
+
+Com base nas anotações preenchidas, gerar:
+
+* resumo da mensagem
+* principais ensinamentos
+* aplicações práticas
+* conclusão resumida
+
+Importante:
+
+* não usar IA externa
+* não usar API
+* gerar localmente com regras textuais inteligentes
+
+O resumo deve:
+
+* poder ser editado
+* ser salvo localmente
+
+---
+
+# MÓDULO 7 — EXPORTAÇÃO PDF
+
+Implemente o módulo de geração de PDF.
+
+Quero:
+
+PDF profissional contendo:
+
+* logo do sistema
+* título da pregação
+* pregador
+* igreja
+* data
+* versículo base
+* versículos secundários
+* pontos principais
+* observações
+* resumo final
+
+O PDF deve:
+
+* ser gerado localmente
+* ficar pronto para compartilhamento
+* ter layout bonito e profissional
+
+---
+
+# MÓDULO 8 — DASHBOARD LOCAL
+
+Implemente o dashboard local.
+
+Quero mostrar:
+
+* total de mensagens
+* total de favoritos
+* pregadores mais frequentes
+* igrejas mais frequentes
+* temas mais recorrentes
+
+Tudo calculado localmente com SQLite.
+
+Visual moderno e limpo.
+
+---
+
+Seu objetivo é gerar um aplicativo Android profissional, offline, robusto, modular, escalável e fiel às especificações de `docs/spec.md` e `docs/prd.md`, sempre utilizando corretamente o logo oficial localizado em `/img`.
