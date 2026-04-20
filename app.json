@@ -1,0 +1,23 @@
+{
+  "expo": {
+    "name": "Mensagem Transformadora",
+    "slug": "mensagem-transformadora",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "platforms": [
+      "android"
+    ],
+    "android": {
+      "package": "com.mensagemtransformadora.app"
+    },
+    "jsEngine": "hermes",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "plugins": [
+      "expo-asset",
+      "expo-font",
+      "expo-sqlite"
+    ]
+  }
+}
