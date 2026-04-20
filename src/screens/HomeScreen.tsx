@@ -4,7 +4,7 @@ import React from 'react';
 import { FlatList, Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
-import { Card, Fab, IconButton, ScreenLayout } from '../components';
+import { AppButton, Card, Fab, IconButton, ScreenLayout } from '../components';
 import type { HomeStackParamList } from '../navigation/RootNavigator';
 import { sermonNoteRepository } from '../repositories/sermonNoteRepository';
 import { theme } from '../theme/theme';
@@ -41,9 +41,12 @@ export function HomeScreen({ navigation }: Props) {
   );
 
   const renderItem = React.useCallback(
-    ({ item }: { item: SermonNote }) => (
+    ({ item, index }: { item: SermonNote; index: number }) => {
+      const palette = getPrimaryCardPalette(index);
+      return (
       <Pressable onPress={() => navigation.navigate('Details', { id: item.id })} style={styles.cardPressable}>
-        <Card>
+        <Card style={[styles.coloredCard, { backgroundColor: palette.bg, borderColor: palette.bg }]}>
+          <View pointerEvents="none" style={[styles.coloredOverlay, { backgroundColor: palette.overlay }]} />
           <View style={styles.cardHeader}>
             <AppText variant="subtitle" numberOfLines={2} style={styles.cardTitle}>
               {item.sermonTitle}
@@ -69,7 +72,8 @@ export function HomeScreen({ navigation }: Props) {
           </AppText>
         </Card>
       </Pressable>
-    ),
+      );
+    },
     [navigation]
   );
 
@@ -101,12 +105,26 @@ export function HomeScreen({ navigation }: Props) {
           </Card>
         ) : items.length === 0 ? (
           <Card>
-            <AppText variant="subtitle">Nenhuma mensagem encontrada</AppText>
-            <AppText color={theme.colors.mutedText} style={styles.paragraph}>
-              {debouncedQuery
-                ? 'Tente buscar por outros termos.'
-                : 'Toque no botão + para criar sua primeira anotação de pregação.'}
-            </AppText>
+            <View style={styles.emptyHeader}>
+              <View style={styles.emptyIcon}>
+                <MaterialIcons name={debouncedQuery ? 'search-off' : 'inbox'} size={22} color={theme.colors.primary} />
+              </View>
+              <View style={styles.emptyText}>
+                <AppText variant="subtitle">
+                  {debouncedQuery ? 'Nada encontrado' : 'Sem mensagens no histórico'}
+                </AppText>
+                <AppText color={theme.colors.mutedText} style={styles.paragraph}>
+                  {debouncedQuery
+                    ? 'Tente buscar por outros termos.'
+                    : 'Crie sua primeira anotação para começar a registrar suas mensagens.'}
+                </AppText>
+              </View>
+            </View>
+            {!debouncedQuery ? (
+              <View style={styles.emptyActions}>
+                <AppButton label="Criar primeira mensagem" iconName="add" onPress={() => navigation.navigate('NewMessage')} />
+              </View>
+            ) : null}
           </Card>
         ) : (
           <FlatList
@@ -150,7 +168,36 @@ const styles = StyleSheet.create({
   listContent: { paddingBottom: 120 },
   separator: { height: theme.spacing.md },
   cardPressable: {},
+  coloredCard: { overflow: 'hidden', position: 'relative' },
+  coloredOverlay: {
+    position: 'absolute',
+    right: -70,
+    top: -50,
+    width: 180,
+    height: 180,
+    borderRadius: 90
+  },
   cardHeader: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between' },
   cardTitle: { flex: 1, paddingRight: theme.spacing.md },
-  cardMeta: { marginTop: theme.spacing.sm }
+  cardMeta: { marginTop: theme.spacing.sm },
+  emptyHeader: { flexDirection: 'row', alignItems: 'flex-start' },
+  emptyIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: theme.radius.md,
+    backgroundColor: theme.colors.primarySoft,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  emptyText: { flex: 1, paddingLeft: theme.spacing.md },
+  emptyActions: { marginTop: theme.spacing.md }
 });
+
+function getPrimaryCardPalette(index: number): { bg: string; overlay: string } {
+  const variants = [
+    { bg: theme.colors.primarySoft, overlay: '#1E6FDB1A' },
+    { bg: theme.colors.backgroundAlt, overlay: '#1E6FDB14' },
+    { bg: '#D7E7FF', overlay: '#1E6FDB17' }
+  ];
+  return variants[index % variants.length];
+}

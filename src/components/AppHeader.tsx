@@ -9,9 +9,10 @@ export type AppHeaderProps = {
   title: string;
   right?: React.ReactNode;
   variant?: 'default' | 'brand';
+  showTitle?: boolean;
 };
 
-export function AppHeader({ title, right, variant = 'default' }: AppHeaderProps) {
+export function AppHeader({ title, right, variant = 'default', showTitle = true }: AppHeaderProps) {
   const insets = useSafeAreaInsets();
   const isBrand = variant === 'brand';
 
@@ -32,13 +33,15 @@ export function AppHeader({ title, right, variant = 'default' }: AppHeaderProps)
             accessibilityLabel="Logo Mensagem Transformadora"
           />
         </View>
-        <AppText
-          variant="title"
-          numberOfLines={1}
-          style={[styles.title, isBrand ? styles.titleBrand : styles.titleDefault]}
-        >
-          {title}
-        </AppText>
+        {showTitle ? (
+          <AppText
+            variant="title"
+            numberOfLines={1}
+            style={[styles.title, isBrand ? styles.titleBrand : styles.titleDefault]}
+          >
+            {title}
+          </AppText>
+        ) : null}
       </View>
       <View style={styles.right}>{right}</View>
     </View>
@@ -50,17 +53,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: theme.spacing.lg,
     paddingBottom: theme.spacing.md,
     flexDirection: 'row',
-    alignItems: 'flex-end',
+    alignItems: 'center',
     justifyContent: 'space-between'
   },
   containerDefault: {
     backgroundColor: theme.colors.surface,
     borderBottomWidth: 1,
-    borderBottomColor: theme.colors.border
+    borderBottomColor: theme.colors.border,
+    shadowColor: '#000',
+    shadowOpacity: 0.06,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 2
   },
   containerBrand: {
     backgroundColor: theme.colors.primary,
-    borderBottomWidth: 0
+    borderBottomWidth: 0,
+    shadowColor: '#000',
+    shadowOpacity: 0.12,
+    shadowRadius: 14,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 4
   },
   left: { flexDirection: 'row', alignItems: 'center', flex: 1, paddingRight: theme.spacing.md },
   right: { alignItems: 'flex-end', justifyContent: 'center' },

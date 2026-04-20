@@ -42,7 +42,8 @@ export function StartScreen({ navigation }: Props) {
         <IconButton 
           iconName="info-outline" 
           accessibilityLabel="Sobre o aplicativo" 
-          color="#FFFFFF" 
+           color="#FFFFFF" 
+           variant="brand"
           onPress={() => navigation.navigate('About')} 
         />
       }
@@ -100,16 +101,29 @@ export function StartScreen({ navigation }: Props) {
         </Card>
       ) : items.length === 0 ? (
         <Card>
-          <AppText variant="subtitle">Nenhuma mensagem ainda</AppText>
-          <AppText color={theme.colors.mutedText} style={styles.paragraph}>
-            Toque em “Nova mensagem” para criar sua primeira anotação.
-          </AppText>
+          <View style={styles.emptyHeader}>
+            <View style={styles.emptyIcon}>
+              <MaterialIcons name="auto-stories" size={22} color={theme.colors.primary} />
+            </View>
+            <View style={styles.emptyText}>
+              <AppText variant="subtitle">Nenhuma mensagem ainda</AppText>
+              <AppText color={theme.colors.mutedText} style={styles.paragraph}>
+                Crie sua primeira anotação e comece a construir seu histórico.
+              </AppText>
+            </View>
+          </View>
+          <View style={styles.emptyActions}>
+            <AppButton label="Criar primeira mensagem" iconName="add" onPress={() => navigation.navigate('NewMessage')} />
+          </View>
         </Card>
       ) : (
         <View style={styles.cards}>
-          {items.map((item) => (
+          {items.map((item, index) => {
+            const palette = getPrimaryCardPalette(index);
+            return (
             <Pressable key={item.id} onPress={() => navigation.navigate('Details', { id: item.id })}>
-              <Card>
+              <Card style={[styles.coloredCard, { backgroundColor: palette.bg, borderColor: palette.bg }]}>
+                <View pointerEvents="none" style={[styles.coloredOverlay, { backgroundColor: palette.overlay }]} />
                 <View style={styles.cardHeader}>
                   <AppText variant="subtitle" numberOfLines={2} style={styles.cardTitle}>
                     {item.sermonTitle}
@@ -129,7 +143,8 @@ export function StartScreen({ navigation }: Props) {
                 </AppText>
               </Card>
             </Pressable>
-          ))}
+            );
+          })}
         </View>
       )}
 
@@ -176,9 +191,38 @@ const styles = StyleSheet.create({
   linkPressed: { backgroundColor: '#00000008' },
   linkText: { color: theme.colors.primary, marginRight: 2 },
   cards: { gap: theme.spacing.md },
+  coloredCard: { overflow: 'hidden', position: 'relative' },
+  coloredOverlay: {
+    position: 'absolute',
+    right: -60,
+    top: -40,
+    width: 160,
+    height: 160,
+    borderRadius: 80
+  },
   cardHeader: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between' },
   cardTitle: { flex: 1, paddingRight: theme.spacing.md },
   cardMeta: { marginTop: theme.spacing.sm },
   paragraph: { marginTop: theme.spacing.sm },
-  bottomCta: { marginTop: theme.spacing.xl }
+  bottomCta: { marginTop: theme.spacing.xl },
+  emptyHeader: { flexDirection: 'row', alignItems: 'flex-start' },
+  emptyIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: theme.radius.md,
+    backgroundColor: theme.colors.primarySoft,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  emptyText: { flex: 1, paddingLeft: theme.spacing.md },
+  emptyActions: { marginTop: theme.spacing.md }
 });
+
+function getPrimaryCardPalette(index: number): { bg: string; overlay: string } {
+  const variants = [
+    { bg: theme.colors.primarySoft, overlay: '#1E6FDB1A' },
+    { bg: theme.colors.backgroundAlt, overlay: '#1E6FDB14' },
+    { bg: '#D7E7FF', overlay: '#1E6FDB17' }
+  ];
+  return variants[index % variants.length];
+}

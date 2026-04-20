@@ -5,6 +5,7 @@ import { Alert, StyleSheet, View } from 'react-native';
 import { AppButton, Card, IconButton, ScreenLayout } from '../components';
 import type { HomeStackParamList } from '../navigation/RootNavigator';
 import { sermonNoteRepository } from '../repositories/sermonNoteRepository';
+import { shareSermonNoteAsPdf } from '../services/pdf';
 import { theme } from '../theme/theme';
 import { AppText } from '../components/AppText';
 import type { SermonNote } from '../types/sermon';
@@ -70,6 +71,18 @@ export function MessageDetailsScreen({ navigation, route }: Props) {
     }
   }
 
+  async function handleExportPdf() {
+    if (!note || isWorking) return;
+    try {
+      setIsWorking(true);
+      await shareSermonNoteAsPdf(note);
+    } catch {
+      Alert.alert('Erro', 'Não foi possível gerar o PDF.');
+    } finally {
+      setIsWorking(false);
+    }
+  }
+
   function handleDelete() {
     if (!note || isWorking) return;
 
@@ -108,6 +121,14 @@ export function MessageDetailsScreen({ navigation, route }: Props) {
         accessibilityLabel="Duplicar"
         onPress={handleDuplicate}
         disabled={status !== 'ready' || !note || isWorking}
+      />
+      <View style={styles.headerSpacer} />
+      <IconButton
+        iconName="picture-as-pdf"
+        accessibilityLabel="Exportar PDF"
+        onPress={handleExportPdf}
+        disabled={status !== 'ready' || !note || isWorking}
+        color={theme.colors.primary}
       />
       <View style={styles.headerSpacer} />
       <IconButton

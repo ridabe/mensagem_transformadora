@@ -9,14 +9,20 @@ export type IconButtonProps = PressableProps & {
   iconName: React.ComponentProps<typeof MaterialIcons>['name'];
   accessibilityLabel: string;
   color?: string;
+  variant?: 'default' | 'brand';
 };
 
-export function IconButton({ iconName, accessibilityLabel, color, style, ...props }: IconButtonProps) {
+export function IconButton({ iconName, accessibilityLabel, color, variant = 'default', style, ...props }: IconButtonProps) {
   return (
     <Pressable
       {...props}
       accessibilityLabel={accessibilityLabel}
-      style={({ pressed }) => [styles.button, pressed ? styles.pressed : null, style]}
+      style={({ pressed }) => [
+        styles.button,
+        variant === 'brand' ? styles.buttonBrand : null,
+        pressed ? (variant === 'brand' ? styles.pressedBrand : styles.pressed) : null,
+        style
+      ]}
       hitSlop={10}
     >
       <MaterialIcons name={iconName} size={22} color={color ?? theme.colors.text} />
@@ -32,5 +38,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  pressed: { backgroundColor: '#00000008' }
+  buttonBrand: {
+    backgroundColor: '#FFFFFF14',
+    borderWidth: 1,
+    borderColor: '#FFFFFF26'
+  },
+  pressed: { backgroundColor: '#00000008' },
+  pressedBrand: { backgroundColor: '#FFFFFF22', borderColor: '#FFFFFF40' }
 });

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { Alert, LayoutAnimation, Platform, Pressable, StyleSheet, TextInput, UIManager, View } from 'react-native';
 
 import { theme } from '../theme/theme';
 import { AppButton } from './AppButton';
@@ -42,6 +42,12 @@ export function SermonNoteForm({
   onCancel,
   onSubmit
 }: SermonNoteFormProps) {
+  React.useEffect(() => {
+    if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+      UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+  }, []);
+
   const [userName, setUserName] = React.useState(initialValues.userName);
   const [preacherName, setPreacherName] = React.useState(initialValues.preacherName);
   const [churchName, setChurchName] = React.useState(initialValues.churchName);
@@ -186,7 +192,10 @@ export function SermonNoteForm({
               Versículos secundários
             </AppText>
             <Pressable
-              onPress={() => setSecondaryVerses((prev) => [...prev, ''])}
+              onPress={() => {
+                LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+                setSecondaryVerses((prev) => [...prev, '']);
+              }}
               style={({ pressed }) => [styles.inlineAction, pressed ? styles.inlineActionPressed : null]}
               disabled={isSubmitting}
             >
@@ -208,9 +217,10 @@ export function SermonNoteForm({
                 <IconButton
                   iconName="delete"
                   accessibilityLabel="Remover versículo"
-                  onPress={() =>
-                    setSecondaryVerses((prev) => (prev.length <= 1 ? [''] : prev.filter((_, i) => i !== index)))
-                  }
+                  onPress={() => {
+                    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+                    setSecondaryVerses((prev) => (prev.length <= 1 ? [''] : prev.filter((_, i) => i !== index)));
+                  }}
                   disabled={isSubmitting}
                 />
               </View>
@@ -240,7 +250,10 @@ export function SermonNoteForm({
         <View style={styles.inlineHeader}>
           <AppText variant="subtitle">Pontos principais</AppText>
           <Pressable
-            onPress={() => setKeyPoints((prev) => [...prev, { id: createId(), title: '', content: '' }])}
+            onPress={() => {
+              LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+              setKeyPoints((prev) => [...prev, { id: createId(), title: '', content: '' }]);
+            }}
             style={({ pressed }) => [styles.inlineAction, pressed ? styles.inlineActionPressed : null]}
             disabled={isSubmitting}
           >
@@ -260,7 +273,10 @@ export function SermonNoteForm({
                 <IconButton
                   iconName="delete"
                   accessibilityLabel="Remover ponto"
-                  onPress={() => setKeyPoints((prev) => (prev.length <= 1 ? prev : prev.filter((x) => x.id !== p.id)))}
+                  onPress={() => {
+                    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+                    setKeyPoints((prev) => (prev.length <= 1 ? prev : prev.filter((x) => x.id !== p.id)));
+                  }}
                   disabled={isSubmitting || keyPoints.length <= 1}
                 />
               </View>
@@ -363,7 +379,7 @@ export function SermonNoteForm({
       </Card>
 
       <View style={styles.actions}>
-        <AppButton label={isSubmitting ? 'Salvando...' : submitLabel} onPress={handleSubmit} disabled={isSubmitting} />
+        <AppButton label={submitLabel} onPress={handleSubmit} loading={isSubmitting} />
         <View style={styles.spacer} />
         <AppButton label="Cancelar" variant="ghost" onPress={onCancel} disabled={isSubmitting} />
       </View>
@@ -423,4 +439,3 @@ function createId(): string {
   const random = Math.random().toString(36).slice(2, 10);
   return `${Date.now().toString(36)}${random}`;
 }
-
