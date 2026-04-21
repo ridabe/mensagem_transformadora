@@ -2,13 +2,19 @@
   "expo": {
     "name": "Mensagem Transformadora",
     "slug": "mensagem-transformadora",
-    "version": "1.0.0",
+    "version": "1.0.1",
+    "icon": "./img/icon.png",
     "orientation": "portrait",
     "platforms": [
       "android"
     ],
     "android": {
-      "package": "com.mensagemtransformadora.app"
+      "package": "com.algoritmum.msgt",
+      "versionCode": 2,
+      "adaptiveIcon": {
+        "foregroundImage": "./img/adaptive-icon.png",
+        "backgroundColor": "#071A3A"
+      }
     },
     "jsEngine": "hermes",
     "assetBundlePatterns": [
@@ -27,6 +33,11 @@
       "expo-asset",
       "expo-font",
       "expo-sqlite"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "8d2903af-1918-4196-9a01-90898f46807e"
+      }
+    }
   }
 }

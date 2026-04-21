@@ -19,6 +19,8 @@ export function DashboardScreen() {
     try {
       const data = await sermonNoteRepository.getDashboardStats({ days: 7, topLimit: 5 });
       setStats(data);
+    } catch {
+      setStats(null);
     } finally {
       setStatus('ready');
     }

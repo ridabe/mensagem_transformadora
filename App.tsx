@@ -13,21 +13,38 @@ SplashScreen.preventAutoHideAsync().catch(() => {});
 export default function App() {
   const [ready, setReady] = React.useState(false);
   const [showPremiumSplash, setShowPremiumSplash] = React.useState(true);
+  const readyRef = React.useRef(false);
 
   React.useEffect(() => {
     let cancelled = false;
+    const timeoutMs = 9000;
+
+    const timeoutHandle = setTimeout(() => {
+      if (cancelled) return;
+      if (readyRef.current) return;
+      console.error('Timeout ao inicializar o banco local. Continuando a abertura do app.');
+      readyRef.current = true;
+      setReady(true);
+    }, timeoutMs);
 
     initializeDatabase()
       .then(() => {
-        if (!cancelled) setReady(true);
+        if (cancelled) return;
+        clearTimeout(timeoutHandle);
+        readyRef.current = true;
+        setReady(true);
       })
       .catch((error) => {
         console.error('Falha ao inicializar o banco local:', error);
-        if (!cancelled) setReady(true);
+        if (cancelled) return;
+        clearTimeout(timeoutHandle);
+        readyRef.current = true;
+        setReady(true);
       });
 
     return () => {
       cancelled = true;
+      clearTimeout(timeoutHandle);
     };
   }, []);
 
@@ -38,11 +55,11 @@ export default function App() {
   return (
     <NavigationContainer theme={navigationTheme}>
       <StatusBar style={showPremiumSplash ? 'light' : 'auto'} />
-      {ready ? <RootNavigator /> : null}
+      <RootNavigator />
       <PremiumSplashOverlay
         visible={showPremiumSplash}
-        durationMs={2400}
-        canFinish={ready}
+        durationMs={3000}
+        canFinish
         onRequestHideNativeSplash={handleRequestHideNativeSplash}
         onFinished={() => setShowPremiumSplash(false)}
       />

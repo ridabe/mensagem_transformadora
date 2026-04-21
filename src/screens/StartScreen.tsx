@@ -22,6 +22,8 @@ export function StartScreen({ navigation }: Props) {
     try {
       const data = await sermonNoteRepository.list({ limit: 3, offset: 0 });
       setItems(data);
+    } catch {
+      setItems([]);
     } finally {
       setStatus('ready');
     }
