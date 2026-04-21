@@ -4,7 +4,7 @@ import { Text } from 'react-native';
 
 import { theme } from '../theme/theme';
 
-type Variant = 'title' | 'subtitle' | 'body' | 'caption';
+type Variant = 'display' | 'title' | 'subtitle' | 'body' | 'caption' | 'overline';
 
 export type AppTextProps = TextProps & {
   variant?: Variant;

@@ -3,6 +3,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import { AppButton, AppText, Card, IconButton, ScreenLayout, SermonCard } from '../components';
 import type { HomeStackParamList } from '../navigation/RootNavigator';
@@ -49,41 +50,61 @@ export function StartScreen({ navigation }: Props) {
       }
     >
       <View style={styles.hero}>
-        <View style={styles.heroTop}>
-          <View style={styles.heroBadge}>
-            <MaterialIcons name="offline-bolt" size={18} color="#FFFFFF" />
-            <AppText variant="caption" style={styles.heroBadgeText}>
-              Offline • Local • Rápido
-            </AppText>
+        <LinearGradient
+          colors={['#071A3A', '#0B2E6F', '#0D47A1'] as const}
+          start={{ x: 0.05, y: 0.05 }}
+          end={{ x: 0.95, y: 0.95 }}
+          style={styles.heroGradient}
+        >
+          <LinearGradient
+            colors={['#D7B15A33', '#D7B15A00', '#D7B15A00'] as const}
+            start={{ x: 0.9, y: 0.1 }}
+            end={{ x: 0.2, y: 0.9 }}
+            style={styles.heroGold}
+          />
+          <View pointerEvents="none" style={styles.heroOrb} />
+
+          <View style={styles.heroTop}>
+            <View style={styles.heroBadge}>
+              <MaterialIcons name="offline-bolt" size={18} color="#FFFFFF" />
+              <AppText variant="caption" style={styles.heroBadgeText}>
+                Offline • Local • Rápido
+              </AppText>
+            </View>
           </View>
-        </View>
 
-        <AppText variant="title" style={styles.heroTitle}>
-          Registre mensagens com clareza e revisite quando quiser.
-        </AppText>
-        <AppText style={styles.heroSubtitle} color="#EAF2FF">
-          Crie, edite, favorite e organize suas anotações — tudo 100% offline.
-        </AppText>
+          <AppText variant="display" style={styles.heroTitle}>
+            Capture sua pregação.
+          </AppText>
+          <AppText style={styles.heroSubtitle} color="#EAF2FF">
+            Um espaço premium para anotar, organizar e revisitar mensagens — sem depender de internet.
+          </AppText>
 
-        <View style={styles.heroActions}>
-          <AppButton
-            label="Nova mensagem"
-            iconName="add"
-            variant="light"
-            onPress={() => navigation.navigate('NewMessage')}
-          />
-          <View style={styles.heroSpacer} />
-          <AppButton
-            label="Ver histórico"
-            variant="outlineLight"
-            iconName="history"
-            onPress={() => navigation.navigate('History')}
-          />
-        </View>
+          <View style={styles.heroActions}>
+            <AppButton
+              label="Nova mensagem"
+              iconName="add"
+              variant="light"
+              onPress={() => navigation.navigate('NewMessage')}
+            />
+            <View style={styles.heroSpacer} />
+            <AppButton
+              label="Ver histórico"
+              variant="outlineLight"
+              iconName="history"
+              onPress={() => navigation.navigate('History')}
+            />
+          </View>
+        </LinearGradient>
       </View>
 
       <View style={styles.sectionHeader}>
-        <AppText variant="subtitle">Últimas mensagens</AppText>
+        <View>
+          <AppText variant="overline" color={theme.colors.mutedText}>
+            ATALHO RÁPIDO
+          </AppText>
+          <AppText variant="subtitle">Últimas mensagens</AppText>
+        </View>
         <Pressable
           onPress={() => navigation.navigate('History')}
           style={({ pressed }) => [styles.link, pressed ? styles.linkPressed : null]}
@@ -145,24 +166,31 @@ export function StartScreen({ navigation }: Props) {
 
 const styles = StyleSheet.create({
   content: { paddingTop: theme.spacing.md, paddingBottom: 120 },
-  hero: {
-    backgroundColor: theme.colors.primary,
-    borderRadius: theme.radius.lg,
-    padding: theme.spacing.lg
+  hero: { borderRadius: theme.radius.xl, overflow: 'hidden' },
+  heroGradient: { borderRadius: theme.radius.xl, padding: theme.spacing.xl, overflow: 'hidden' },
+  heroGold: { ...StyleSheet.absoluteFillObject },
+  heroOrb: {
+    position: 'absolute',
+    right: -90,
+    top: -90,
+    width: 220,
+    height: 220,
+    borderRadius: 110,
+    backgroundColor: '#FFFFFF12'
   },
   heroTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   heroBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF26',
+    backgroundColor: '#FFFFFF1F',
     borderRadius: theme.radius.pill,
     paddingHorizontal: theme.spacing.md,
     paddingVertical: theme.spacing.sm
   },
   heroBadgeText: { color: '#FFFFFF', marginLeft: theme.spacing.sm },
-  heroTitle: { color: '#FFFFFF', marginTop: theme.spacing.md },
-  heroSubtitle: { marginTop: theme.spacing.sm },
-  heroActions: { marginTop: theme.spacing.lg },
+  heroTitle: { color: '#FFFFFF', marginTop: theme.spacing.lg },
+  heroSubtitle: { marginTop: theme.spacing.sm, lineHeight: 21 },
+  heroActions: { marginTop: theme.spacing.xl },
   heroSpacer: { height: theme.spacing.sm },
   sectionHeader: {
     marginTop: theme.spacing.xl,

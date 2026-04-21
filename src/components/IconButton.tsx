@@ -17,12 +17,15 @@ export function IconButton({ iconName, accessibilityLabel, color, variant = 'def
     <Pressable
       {...props}
       accessibilityLabel={accessibilityLabel}
-      style={({ pressed }) => [
-        styles.button,
-        variant === 'brand' ? styles.buttonBrand : null,
-        pressed ? (variant === 'brand' ? styles.pressedBrand : styles.pressed) : null,
-        style
-      ]}
+      style={(state) => {
+        const baseStyle = [
+          styles.button,
+          variant === 'brand' ? styles.buttonBrand : null,
+          state.pressed ? (variant === 'brand' ? styles.pressedBrand : styles.pressed) : null
+        ];
+        const resolvedUserStyle = typeof style === 'function' ? style(state) : style;
+        return [...baseStyle, resolvedUserStyle];
+      }}
       hitSlop={10}
     >
       <MaterialIcons name={iconName} size={22} color={color ?? theme.colors.text} />

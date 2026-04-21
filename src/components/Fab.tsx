@@ -13,7 +13,11 @@ export function Fab({ iconName = 'add', style, ...props }: FabProps) {
   return (
     <Pressable
       {...props}
-      style={({ pressed }) => [styles.fab, pressed ? styles.fabPressed : null, style]}
+      style={(state) => {
+        const baseStyle = [styles.fab, state.pressed ? styles.fabPressed : null];
+        const resolvedUserStyle = typeof style === 'function' ? style(state) : style;
+        return [...baseStyle, resolvedUserStyle];
+      }}
     >
       <View style={styles.iconWrap}>
         <MaterialIcons name={iconName} size={26} color="#FFFFFF" />

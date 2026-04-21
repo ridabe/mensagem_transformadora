@@ -8,31 +8,30 @@ import { AppText } from './AppText';
 export type AppHeaderProps = {
   title: string;
   right?: React.ReactNode;
-  variant?: 'default' | 'brand';
+  variant?: 'default' | 'brand' | 'transparent';
   showTitle?: boolean;
 };
 
 export function AppHeader({ title, right, variant = 'default', showTitle = true }: AppHeaderProps) {
   const insets = useSafeAreaInsets();
   const isBrand = variant === 'brand';
+  const isTransparent = variant === 'transparent';
 
   return (
     <View
       style={[
         styles.container,
-        isBrand ? styles.containerBrand : styles.containerDefault,
+        isTransparent ? styles.containerTransparent : isBrand ? styles.containerBrand : styles.containerDefault,
         { paddingTop: Math.max(insets.top, theme.spacing.lg) }
       ]}
     >
       <View style={styles.left}>
-        <View style={[styles.logoWrap, isBrand ? styles.logoWrapBrand : styles.logoWrapDefault]}>
-          <Image
-            source={require('../../img/logo.png')}
-            style={styles.logo}
-            resizeMode="contain"
-            accessibilityLabel="Logo Mensagem Transformadora"
-          />
-        </View>
+        <Image
+          source={require('../../img/logo.png')}
+          style={styles.logo}
+          resizeMode="contain"
+          accessibilityLabel="Logo Mensagem Transformadora"
+        />
         {showTitle ? (
           <AppText
             variant="title"
@@ -57,17 +56,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   containerDefault: {
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.background,
     borderBottomWidth: 1,
-    borderBottomColor: theme.colors.border,
-    shadowColor: '#000',
-    shadowOpacity: 0.06,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 6 },
-    elevation: 2
+    borderBottomColor: '#0000000A'
   },
   containerBrand: {
-    backgroundColor: theme.colors.primary,
+    backgroundColor: '#071A3A',
     borderBottomWidth: 0,
     shadowColor: '#000',
     shadowOpacity: 0.12,
@@ -75,25 +69,10 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 8 },
     elevation: 4
   },
+  containerTransparent: { backgroundColor: 'transparent', borderBottomWidth: 0 },
   left: { flexDirection: 'row', alignItems: 'center', flex: 1, paddingRight: theme.spacing.md },
   right: { alignItems: 'flex-end', justifyContent: 'center' },
-  logoWrap: {
-    width: 28,
-    height: 28,
-    borderRadius: theme.radius.sm,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: theme.spacing.sm
-  },
-  logoWrapDefault: {
-    backgroundColor: theme.colors.primarySoft,
-    borderWidth: 1,
-    borderColor: theme.colors.border
-  },
-  logoWrapBrand: {
-    backgroundColor: '#FFFFFF'
-  },
-  logo: { width: 18, height: 18 },
+  logo: { width: 22, height: 22, marginRight: theme.spacing.sm },
   title: { flexShrink: 1 },
   titleDefault: { color: theme.colors.text },
   titleBrand: { color: '#FFFFFF' }

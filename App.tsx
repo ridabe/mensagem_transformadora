@@ -6,11 +6,13 @@ import React from 'react';
 import { initializeDatabase } from './src/database/migrations';
 import { RootNavigator } from './src/navigation/RootNavigator';
 import { navigationTheme } from './src/theme/navigationTheme';
+import { PremiumSplashOverlay } from './src/components/PremiumSplashOverlay';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
 export default function App() {
   const [ready, setReady] = React.useState(false);
+  const [showPremiumSplash, setShowPremiumSplash] = React.useState(true);
 
   React.useEffect(() => {
     let cancelled = false;
@@ -29,27 +31,22 @@ export default function App() {
     };
   }, []);
 
-  React.useEffect(() => {
-    if (!ready) return;
+  const handleRequestHideNativeSplash = React.useCallback(() => {
+    SplashScreen.hideAsync().catch(() => {});
+  }, []);
 
-    const minDurationMs = 2200;
-    const startedAt = appStartedAt;
-    const elapsed = Date.now() - startedAt;
-    const remaining = Math.max(0, minDurationMs - elapsed);
-
-    const handle = setTimeout(() => {
-      SplashScreen.hideAsync().catch(() => {});
-    }, remaining);
-
-    return () => clearTimeout(handle);
-  }, [ready]);
+  if (!ready) return null;
 
   return (
     <NavigationContainer theme={navigationTheme}>
-      <StatusBar style="auto" />
+      <StatusBar style={showPremiumSplash ? 'light' : 'auto'} />
       <RootNavigator />
+      <PremiumSplashOverlay
+        visible={showPremiumSplash}
+        durationMs={2400}
+        onRequestHideNativeSplash={handleRequestHideNativeSplash}
+        onFinished={() => setShowPremiumSplash(false)}
+      />
     </NavigationContainer>
   );
 }
-
-const appStartedAt = Date.now();

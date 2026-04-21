@@ -17,10 +17,10 @@
     "splash": {
       "image": "./img/logo.png",
       "resizeMode": "contain",
-      "backgroundColor": "#1E6FDB"
+      "backgroundColor": "#071A3A"
     },
     "androidStatusBar": {
-      "backgroundColor": "#1E6FDB",
+      "backgroundColor": "#071A3A",
       "barStyle": "light-content"
     },
     "plugins": [

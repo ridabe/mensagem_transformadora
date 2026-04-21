@@ -23,12 +23,16 @@ export function AppButton({ label, variant = 'primary', iconName, loading, disab
     <Pressable
       {...props}
       disabled={isDisabled}
-      style={({ pressed }) => [
-        styles.button,
-        pressed && !isDisabled ? styles.buttonPressed : null,
-        isDisabled ? styles.buttonDisabled : null,
-        style
-      ]}
+      style={(state) => {
+        const baseStyle = [
+          styles.button,
+          state.pressed && !isDisabled ? styles.buttonPressed : null,
+          isDisabled ? styles.buttonDisabled : null
+        ];
+
+        const resolvedUserStyle = typeof style === 'function' ? style(state) : style;
+        return [...baseStyle, resolvedUserStyle];
+      }}
     >
       <View style={styles.content}>
         {loading ? (
