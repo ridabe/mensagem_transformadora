@@ -3,12 +3,18 @@
     "name": "Mensagem Transformadora",
     "slug": "mensagem-transformadora",
     "version": "1.0.0",
+    "icon": "./img/icon.png",
     "orientation": "portrait",
     "platforms": [
       "android"
     ],
     "android": {
-      "package": "com.mensagemtransformadora.app"
+      "package": "com.algoritmum.msgt",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./img/adaptive-icon.png",
+        "backgroundColor": "#071A3A"
+      }
     },
     "jsEngine": "hermes",
     "assetBundlePatterns": [
