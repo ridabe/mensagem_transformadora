@@ -48,8 +48,16 @@ o usuário deve poder editar anotações depois
 o usuário deve poder pesquisar mensagens anteriores
 o usuário deve poder gerar um resumo final
 o usuário deve poder exportar a anotação em PDF
+o usuário deve poder favoritar e duplicar anotações
+o usuário deve ter métricas locais (dashboard) sem internet
 1.7 Funcionalidades principais
-F1. Criar nova anotação de pregação
+F1. Início (porta de entrada)
+
+- Hero com CTA claro para criar uma nova mensagem.
+- Exibição das 3 últimas mensagens gravadas.
+- Acesso rápido ao histórico completo e à tela “Sobre”.
+
+F2. Criar nova anotação de pregação
 
 Campos base:
 
@@ -65,23 +73,47 @@ observações
 conclusão
 resumo final
 exportação PDF
-F2. Listar histórico de pregações
+
+F3. Listar histórico de pregações
 listar todas as mensagens
 ordenação por data
 busca por título
 busca por pregador
 busca por igreja
 filtro por versículo
-F3. Editar anotação
+
+F4. Editar anotação
 alterar qualquer campo salvo
 adicionar novos pontos depois
 atualizar resumo
-F4. Excluir anotação
+
+F5. Excluir anotação
 remoção com confirmação
-F5. Gerar resumo da mensagem
+
+F6. Favoritar e duplicar anotação
+
+- Favoritar/desfavoritar com indicador visual (estrela).
+- Duplicar anotação para reutilizar como modelo (“(Cópia)” no título).
+
+F7. Gerar resumo da mensagem
 
 Com base no conteúdo anotado, o sistema deve montar um resumo estruturado.
 
-F6. Exportar PDF
+F8. Exportar PDF
 
 Gerar um PDF contendo os dados da pregação formatados para leitura e compartilhamento.
+
+F9. Dashboard local
+
+- Total de mensagens.
+- Total e proporção de favoritos.
+- Volume por dia (últimos 7 dias).
+- Ranking de pregadores e igrejas mais frequentes.
+
+F10. Guia de uso (Instruções)
+
+- Instruções por tela dentro do app, com destaques de pontos importantes.
+
+F11. Splash Screen
+
+- Tela inicial com logo centralizado e transição suave para a tela inicial.

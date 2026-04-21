@@ -1,10 +1,10 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useFocusEffect } from '@react-navigation/native';
 import React from 'react';
-import { FlatList, Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { FlatList, StyleSheet, TextInput, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
-import { AppButton, Card, Fab, IconButton, ScreenLayout } from '../components';
+import { AppButton, Card, Fab, IconButton, ScreenLayout, SermonCard } from '../components';
 import type { HomeStackParamList } from '../navigation/RootNavigator';
 import { sermonNoteRepository } from '../repositories/sermonNoteRepository';
 import { theme } from '../theme/theme';
@@ -42,36 +42,19 @@ export function HomeScreen({ navigation }: Props) {
 
   const renderItem = React.useCallback(
     ({ item, index }: { item: SermonNote; index: number }) => {
-      const palette = getPrimaryCardPalette(index);
       return (
-      <Pressable onPress={() => navigation.navigate('Details', { id: item.id })} style={styles.cardPressable}>
-        <Card style={[styles.coloredCard, { backgroundColor: palette.bg, borderColor: palette.bg }]}>
-          <View pointerEvents="none" style={[styles.coloredOverlay, { backgroundColor: palette.overlay }]} />
-          <View style={styles.cardHeader}>
-            <AppText variant="subtitle" numberOfLines={2} style={styles.cardTitle}>
-              {item.sermonTitle}
-            </AppText>
-            {item.favorite ? (
-              <MaterialIcons name="star" size={20} color={theme.colors.primary} />
-            ) : (
-              <MaterialIcons name="star-border" size={20} color={theme.colors.mutedText} />
-            )}
-          </View>
-          <AppText color={theme.colors.mutedText} style={styles.cardMeta} numberOfLines={1}>
-            {item.preacherName} • {item.churchName}
-          </AppText>
-          <AppText color={theme.colors.mutedText} style={styles.cardMeta} numberOfLines={1}>
-            {item.sermonDate}
-            {item.sermonTime ? ` • ${item.sermonTime}` : ''}
-          </AppText>
-          <AppText style={styles.cardMeta} numberOfLines={1}>
-            <AppText variant="caption" color={theme.colors.mutedText}>
-              Versículo base:{' '}
-            </AppText>
-            {item.mainVerse}
-          </AppText>
-        </Card>
-      </Pressable>
+        <View style={styles.cardPressable}>
+          <SermonCard
+            title={item.sermonTitle}
+            subtitle={`${item.preacherName} • ${item.churchName}`}
+            meta={`${item.sermonDate}${item.sermonTime ? ` • ${item.sermonTime}` : ''}`}
+            favorite={item.favorite}
+            index={index}
+            showVerseLine
+            verseLine={item.mainVerse}
+            onPress={() => navigation.navigate('Details', { id: item.id })}
+          />
+        </View>
       );
     },
     [navigation]
@@ -168,17 +151,6 @@ const styles = StyleSheet.create({
   listContent: { paddingBottom: 120 },
   separator: { height: theme.spacing.md },
   cardPressable: {},
-  coloredCard: { overflow: 'hidden', position: 'relative' },
-  coloredOverlay: {
-    position: 'absolute',
-    right: -70,
-    top: -50,
-    width: 180,
-    height: 180,
-    borderRadius: 90
-  },
-  cardHeader: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between' },
-  cardTitle: { flex: 1, paddingRight: theme.spacing.md },
   cardMeta: { marginTop: theme.spacing.sm },
   emptyHeader: { flexDirection: 'row', alignItems: 'flex-start' },
   emptyIcon: {
@@ -192,12 +164,3 @@ const styles = StyleSheet.create({
   emptyText: { flex: 1, paddingLeft: theme.spacing.md },
   emptyActions: { marginTop: theme.spacing.md }
 });
-
-function getPrimaryCardPalette(index: number): { bg: string; overlay: string } {
-  const variants = [
-    { bg: theme.colors.primarySoft, overlay: '#1E6FDB1A' },
-    { bg: theme.colors.backgroundAlt, overlay: '#1E6FDB14' },
-    { bg: '#D7E7FF', overlay: '#1E6FDB17' }
-  ];
-  return variants[index % variants.length];
-}

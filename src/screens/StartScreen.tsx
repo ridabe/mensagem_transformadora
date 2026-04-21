@@ -4,7 +4,7 @@ import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
-import { AppButton, AppText, Card, IconButton, ScreenLayout } from '../components';
+import { AppButton, AppText, Card, IconButton, ScreenLayout, SermonCard } from '../components';
 import type { HomeStackParamList } from '../navigation/RootNavigator';
 import { sermonNoteRepository } from '../repositories/sermonNoteRepository';
 import { theme } from '../theme/theme';
@@ -118,33 +118,17 @@ export function StartScreen({ navigation }: Props) {
         </Card>
       ) : (
         <View style={styles.cards}>
-          {items.map((item, index) => {
-            const palette = getPrimaryCardPalette(index);
-            return (
-            <Pressable key={item.id} onPress={() => navigation.navigate('Details', { id: item.id })}>
-              <Card style={[styles.coloredCard, { backgroundColor: palette.bg, borderColor: palette.bg }]}>
-                <View pointerEvents="none" style={[styles.coloredOverlay, { backgroundColor: palette.overlay }]} />
-                <View style={styles.cardHeader}>
-                  <AppText variant="subtitle" numberOfLines={2} style={styles.cardTitle}>
-                    {item.sermonTitle}
-                  </AppText>
-                  {item.favorite ? (
-                    <MaterialIcons name="star" size={20} color={theme.colors.primary} />
-                  ) : (
-                    <MaterialIcons name="star-border" size={20} color={theme.colors.mutedText} />
-                  )}
-                </View>
-                <AppText color={theme.colors.mutedText} style={styles.cardMeta} numberOfLines={1}>
-                  {item.preacherName} • {item.churchName}
-                </AppText>
-                <AppText color={theme.colors.mutedText} style={styles.cardMeta} numberOfLines={1}>
-                  {item.sermonDate}
-                  {item.sermonTime ? ` • ${item.sermonTime}` : ''}
-                </AppText>
-              </Card>
-            </Pressable>
-            );
-          })}
+          {items.map((item, index) => (
+            <SermonCard
+              key={item.id}
+              title={item.sermonTitle}
+              subtitle={`${item.preacherName} • ${item.churchName}`}
+              meta={`${item.sermonDate}${item.sermonTime ? ` • ${item.sermonTime}` : ''}`}
+              favorite={item.favorite}
+              index={index}
+              onPress={() => navigation.navigate('Details', { id: item.id })}
+            />
+          ))}
         </View>
       )}
 
@@ -191,18 +175,6 @@ const styles = StyleSheet.create({
   linkPressed: { backgroundColor: '#00000008' },
   linkText: { color: theme.colors.primary, marginRight: 2 },
   cards: { gap: theme.spacing.md },
-  coloredCard: { overflow: 'hidden', position: 'relative' },
-  coloredOverlay: {
-    position: 'absolute',
-    right: -60,
-    top: -40,
-    width: 160,
-    height: 160,
-    borderRadius: 80
-  },
-  cardHeader: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between' },
-  cardTitle: { flex: 1, paddingRight: theme.spacing.md },
-  cardMeta: { marginTop: theme.spacing.sm },
   paragraph: { marginTop: theme.spacing.sm },
   bottomCta: { marginTop: theme.spacing.xl },
   emptyHeader: { flexDirection: 'row', alignItems: 'flex-start' },
@@ -217,12 +189,3 @@ const styles = StyleSheet.create({
   emptyText: { flex: 1, paddingLeft: theme.spacing.md },
   emptyActions: { marginTop: theme.spacing.md }
 });
-
-function getPrimaryCardPalette(index: number): { bg: string; overlay: string } {
-  const variants = [
-    { bg: theme.colors.primarySoft, overlay: '#1E6FDB1A' },
-    { bg: theme.colors.backgroundAlt, overlay: '#1E6FDB14' },
-    { bg: '#D7E7FF', overlay: '#1E6FDB17' }
-  ];
-  return variants[index % variants.length];
-}

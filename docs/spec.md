@@ -9,14 +9,21 @@ Domain
 Data
 Persistence local
 Estrutura conceitual
-screens/
-components/
-modules/
-database/
-repositories/
-services/
-utils/
-types/
+src/screens/
+src/components/
+src/navigation/
+src/database/
+src/repositories/
+src/services/
+src/theme/
+src/types/
+
+Observações de implementação (atual):
+
+- Stack: Expo SDK 54 + React Native + TypeScript.
+- Persistência: SQLite local com `expo-sqlite` (async) e pragmas `WAL` + `foreign_keys = ON`.
+- Splash Screen: `expo-splash-screen` com logo e transição automática após inicialização do app.
+- Exportação PDF: `expo-print` + `expo-sharing` com HTML/CSS local e logo embutido.
 3.2 Entidades principais
 Entidade: SermonNote
 
@@ -42,6 +49,7 @@ conclusion?: string
 finalSummary?: string
 createdAt: string
 updatedAt: string
+favorite: boolean
 }
 Entidade: SermonPoint
 type SermonPoint = {
@@ -151,6 +159,14 @@ Usuário compartilha ou salva
 
 5\. Modelo de dados local
 
+Tabela schema\_migrations
+
+CREATE TABLE schema\_migrations (
+
+&#x20; version INTEGER PRIMARY KEY NOT NULL
+
+);
+
 Tabela sermon\_notes
 
 CREATE TABLE sermon\_notes (
@@ -181,13 +197,21 @@ CREATE TABLE sermon\_notes (
 
 &#x20; final\_summary TEXT,
 
-&#x20; highlighted\_phrases TEXT,
+&#x20; highlighted\_phrases TEXT NOT NULL DEFAULT '[]',
+
+&#x20; favorite INTEGER NOT NULL DEFAULT 0,
 
 &#x20; created\_at TEXT NOT NULL,
 
 &#x20; updated\_at TEXT NOT NULL
 
 );
+
+Índices (atuais)
+
+CREATE INDEX idx\_sermon\_notes\_created\_at ON sermon\_notes(created\_at);
+
+CREATE INDEX idx\_sermon\_notes\_favorite ON sermon\_notes(favorite);
 
 Tabela sermon\_points
 
@@ -207,6 +231,8 @@ CREATE TABLE sermon\_points (
 
 );
 
+CREATE INDEX idx\_sermon\_points\_note\_order ON sermon\_points(sermon\_note\_id, point\_order);
+
 Tabela secondary\_verses
 
 CREATE TABLE secondary\_verses (
@@ -221,31 +247,7 @@ CREATE TABLE secondary\_verses (
 
 );
 
-Tabela tags
-
-CREATE TABLE tags (
-
-&#x20; id TEXT PRIMARY KEY,
-
-&#x20; name TEXT NOT NULL UNIQUE
-
-);
-
-Tabela sermon\_note\_tags
-
-CREATE TABLE sermon\_note\_tags (
-
-&#x20; sermon\_note\_id TEXT NOT NULL,
-
-&#x20; tag\_id TEXT NOT NULL,
-
-&#x20; PRIMARY KEY (sermon\_note\_id, tag\_id),
-
-&#x20; FOREIGN KEY (sermon\_note\_id) REFERENCES sermon\_notes(id) ON DELETE CASCADE,
-
-&#x20; FOREIGN KEY (tag\_id) REFERENCES tags(id) ON DELETE CASCADE
-
-);
+CREATE INDEX idx\_secondary\_verses\_note ON secondary\_verses(sermon\_note\_id);
 
 6\. Módulos do sistema
 
@@ -271,7 +273,9 @@ layout base
 
 componentes reutilizáveis
 
-persistência inicial
+Splash Screen
+
+screen inicial (Início)
 
 Módulo 2 — Banco local
 
@@ -341,6 +345,8 @@ duplicar
 
 favoritar
 
+exportar PDF
+
 Módulo 6 — Resumo automático
 
 
@@ -381,5 +387,13 @@ estatísticas simples
 
 contagem de mensagens
 
-temas e pregadores mais frequentes
+pregadores e igrejas mais frequentes
+
+Módulo Extra — Guia de uso
+
+Responsável por:
+
+instruções por tela dentro do app
+
+destaques de pontos importantes
 

@@ -47,6 +47,7 @@ A entidade central do sistema é a **Anotação de Pregação** (Sermon Note), c
   - Exibir um Hero Banner com acesso rápido para "Nova Mensagem" e "Ver histórico".
   - Mostrar as 3 últimas mensagens gravadas, ordenadas por data de criação decrescente.
   - Oferecer acesso à tela "Sobre o Aplicativo".
+  - Deve ter Empty State amigável quando não houver mensagens, com CTA claro para criar a primeira.
 
 ### F02. Gestão de Anotações (CRUD)
 - **Criar (Nova Mensagem)**:
@@ -88,6 +89,9 @@ A entidade central do sistema é a **Anotação de Pregação** (Sermon Note), c
   - Cria uma cópia exata da anotação selecionada.
   - O título da nova anotação recebe o sufixo " (Cópia)".
   - A data de criação (`createdAt`) é renovada, e os IDs internos são gerados novamente para não causar conflitos.
+- **Exportar PDF**:
+  - Deve gerar um PDF local com layout profissional, incluindo logo, título, metadados (pregador/igreja/data), versículos e seções principais.
+  - O arquivo deve ficar pronto para compartilhamento.
 
 ### F06. Dashboard e Métricas Locais
 - **Objetivo**: Prover estatísticas de uso do aplicativo baseadas nos dados inseridos.
@@ -101,7 +105,13 @@ A entidade central do sistema é a **Anotação de Pregação** (Sermon Note), c
     - Ranking das Igrejas mais frequentadas.
   - Todas as informações devem ser reprocessadas dinamicamente ao abrir a tela (Focus Effect).
 
-### F07. Tela Sobre o Aplicativo (About)
+### F07. Guia (Instruções)
+- **Objetivo**: Ajudar o usuário a entender rapidamente como operar cada tela.
+- **Regras**:
+  - Deve existir como seção acessível no rodapé (Tab).
+  - Deve trazer instruções por tela com destaques de pontos importantes.
+
+### F08. Tela Sobre o Aplicativo (About)
 - **Objetivo**: Fornecer créditos e informações da versão.
 - **Regras**:
   - Deve exibir claramente a versão do app (ex: 1.0).
@@ -110,10 +120,17 @@ A entidade central do sistema é a **Anotação de Pregação** (Sermon Note), c
   - Licença: Software Gratuito.
   - Deve exibir o logo do aplicativo de forma proeminente e alinhada ao design visual do sistema.
 
+### F09. Splash Screen
+- **Objetivo**: Criar uma abertura premium, rápida e estável.
+- **Regras**:
+  - Deve usar o logo oficial do sistema centralizado.
+  - Deve manter tempo de exibição entre 2 e 3 segundos, sem travar o app.
+  - Deve ocultar automaticamente após a inicialização do app (incluindo inicialização do banco local).
+
 ---
 
 ## 4. Regras Técnicas e de Arquitetura
 
 - **Transações de Banco de Dados**: Toda operação de escrita complexa (Criação, Edição, Duplicação, Exclusão) deve utilizar `withExclusiveTransactionAsync` para garantir que as tabelas relacionadas (Anotações, Pontos e Versículos) sejam salvas com integridade (se uma falhar, todas falham - *rollback*).
 - **Pragmas SQLite**: O banco deve operar obrigatoriamente com `PRAGMA foreign_keys = ON;` e `PRAGMA journal_mode = WAL;` para performance e integridade referencial.
-- **Gestão de Cores e UI**: Nenhuma tela deve "chumbar" cores em hexadecimal avulsas (exceto em backgrounds isolados previstos); todas devem utilizar as variáveis globais do `theme.ts` para garantir consistência visual.
+- **Gestão de Cores e UI**: O padrão é utilizar as variáveis globais do `theme.ts`. Valores em hexadecimal podem ser usados somente em efeitos visuais controlados (ex.: overlays/gradientes do hero), mantendo consistência com a paleta principal.

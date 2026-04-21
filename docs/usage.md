@@ -61,6 +61,7 @@ Este guia explica como usar cada tela do aplicativo **Mensagem Transformadora**.
 **Ações no topo**
 - **Estrela**: favoritar/desfavoritar a mensagem.
 - **Duplicar**: cria uma cópia (útil para reutilizar um “modelo”).
+- **PDF**: exporta a mensagem em PDF (gera localmente e abre o compartilhamento).
 - **Excluir**: remove a mensagem (com confirmação).
 - **Editar**: abre o formulário de edição.
 
@@ -114,4 +115,14 @@ Este guia explica como usar cada tela do aplicativo **Mensagem Transformadora**.
 **Como usar**
 - Acesse pelo ícone **(i)** na tela Início.
 - Consulte versão, autor, empresa e licença.
+
+---
+
+## 9) Splash Screen (Abertura)
+
+**Objetivo**: mostrar uma abertura premium e rápida, com o logo do app.
+
+**Como funciona**
+- Ao abrir o app, o logo aparece centralizado por alguns segundos enquanto o app inicializa.
+- A transição para a tela Início ocorre automaticamente.
 
