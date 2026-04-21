@@ -21,6 +21,7 @@
       "**/*"
     ],
     "splash": {
+      "image": "./img/logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#071A3A"
     },
