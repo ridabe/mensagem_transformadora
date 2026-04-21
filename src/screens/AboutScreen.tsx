@@ -65,6 +65,18 @@ export function AboutScreen({ navigation }: Props) {
         </AppText>
       </View>
 
+      <Card style={styles.card}>
+        <AppText variant="overline" color={theme.colors.mutedText}>
+          Dados
+        </AppText>
+        <View style={styles.backupActions}>
+          <AppButton label="Backup e Restauração" onPress={() => navigation.navigate('Backup')} />
+        </View>
+        <AppText variant="caption" color={theme.colors.mutedText} style={styles.backupHint}>
+          Exporte um arquivo de backup para restaurar suas mensagens caso precise reinstalar o app.
+        </AppText>
+      </Card>
+
       <View style={styles.actions}>
         <AppButton label="Voltar" variant="ghost" onPress={() => navigation.goBack()} />
       </View>
@@ -169,5 +181,12 @@ const styles = StyleSheet.create({
   },
   actions: {
     marginTop: 'auto',
+  },
+  backupActions: {
+    marginTop: theme.spacing.md,
+  },
+  backupHint: {
+    marginTop: theme.spacing.md,
+    lineHeight: 18,
   },
 });
