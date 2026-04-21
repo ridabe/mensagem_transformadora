@@ -1,6 +1,7 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { Image, StyleSheet, View, Linking } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import { AppButton, AppText, Card, ScreenLayout } from '../components';
 import type { HomeStackParamList } from '../navigation/RootNavigator';
@@ -11,22 +12,35 @@ type Props = NativeStackScreenProps<HomeStackParamList, 'About'>;
 export function AboutScreen({ navigation }: Props) {
   return (
     <ScreenLayout title="Sobre o Aplicativo" scroll contentStyle={styles.content}>
-      <View style={styles.logoContainer}>
-        <Image
-          source={require('../../img/logo.png')}
-          style={styles.logo}
-          resizeMode="contain"
-          accessibilityLabel="Logo Mensagem Transformadora"
-        />
-        <AppText variant="title" style={styles.title}>
-          Mensagem Transformadora
-        </AppText>
-        <View style={styles.badge}>
-          <AppText variant="caption" style={styles.badgeText}>
-            Versão 1.0
+      <LinearGradient
+        colors={['#071A3A', '#0B2E6F', '#0D47A1'] as const}
+        start={{ x: 0.05, y: 0.05 }}
+        end={{ x: 0.95, y: 0.95 }}
+        style={styles.hero}
+      >
+        <View pointerEvents="none" style={styles.heroGold} />
+        <View pointerEvents="none" style={styles.heroOrb} />
+        <View style={styles.logoContainer}>
+          <View style={styles.logoRing}>
+            <View style={styles.logoRingInner}>
+              <Image
+                source={require('../../img/logo.png')}
+                style={styles.logo}
+                resizeMode="contain"
+                accessibilityLabel="Logo Mensagem Transformadora"
+              />
+            </View>
+          </View>
+          <AppText variant="title" style={styles.title}>
+            Mensagem Transformadora
           </AppText>
+          <View style={styles.badge}>
+            <AppText variant="caption" style={styles.badgeText}>
+              Versão 1.0
+            </AppText>
+          </View>
         </View>
-      </View>
+      </LinearGradient>
 
       <Card style={styles.card}>
         <View style={styles.row}>
@@ -60,34 +74,75 @@ export function AboutScreen({ navigation }: Props) {
 
 const styles = StyleSheet.create({
   content: {
-    paddingTop: theme.spacing.xl,
-    paddingBottom: theme.spacing.xl,
+    paddingTop: theme.spacing.md,
+    paddingBottom: theme.spacing.xl
+  },
+  hero: {
+    borderRadius: theme.radius.xl,
+    padding: theme.spacing.xl,
+    overflow: 'hidden',
+    marginBottom: theme.spacing.xl,
+    ...theme.shadow.md
+  },
+  heroGold: {
+    position: 'absolute',
+    left: -160,
+    bottom: -180,
+    width: 300,
+    height: 300,
+    borderRadius: 150,
+    backgroundColor: '#D7B15A22'
+  },
+  heroOrb: {
+    position: 'absolute',
+    right: -90,
+    top: -120,
+    width: 240,
+    height: 240,
+    borderRadius: 120,
+    backgroundColor: '#FFFFFF10'
   },
   logoContainer: {
     alignItems: 'center',
-    marginBottom: theme.spacing.xl,
   },
-  logo: {
-    width: 100,
-    height: 100,
-    marginBottom: theme.spacing.md,
+  logoRing: {
+    width: 112,
+    height: 112,
+    borderRadius: 56,
+    borderWidth: 1,
+    borderColor: '#FFFFFF22',
+    backgroundColor: '#FFFFFF0F',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
+  logoRingInner: {
+    width: 90,
+    height: 90,
+    borderRadius: 45,
+    backgroundColor: '#FFFFFF10',
+    borderWidth: 1,
+    borderColor: '#FFFFFF1A',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  logo: { width: 54, height: 54 },
   title: {
-    fontSize: 24,
+    marginTop: theme.spacing.lg,
     textAlign: 'center',
-    marginBottom: theme.spacing.sm,
+    color: '#FFFFFF'
   },
   badge: {
-    backgroundColor: theme.colors.primarySoft,
+    marginTop: theme.spacing.md,
+    backgroundColor: '#FFFFFF14',
     paddingHorizontal: theme.spacing.md,
     paddingVertical: theme.spacing.xs,
     borderRadius: theme.radius.pill,
     borderWidth: 1,
-    borderColor: theme.colors.primary,
+    borderColor: '#FFFFFF26'
   },
   badgeText: {
-    color: theme.colors.primary,
-    fontWeight: '600',
+    color: '#FFFFFF',
+    fontWeight: '700'
   },
   card: {
     marginBottom: theme.spacing.xl,

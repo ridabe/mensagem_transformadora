@@ -1,10 +1,10 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useFocusEffect } from '@react-navigation/native';
 import React from 'react';
-import { FlatList, Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { FlatList, StyleSheet, TextInput, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
-import { Card, Fab, IconButton, ScreenLayout } from '../components';
+import { AppButton, Card, Fab, IconButton, ScreenLayout, SermonCard } from '../components';
 import type { HomeStackParamList } from '../navigation/RootNavigator';
 import { sermonNoteRepository } from '../repositories/sermonNoteRepository';
 import { theme } from '../theme/theme';
@@ -41,35 +41,22 @@ export function HomeScreen({ navigation }: Props) {
   );
 
   const renderItem = React.useCallback(
-    ({ item }: { item: SermonNote }) => (
-      <Pressable onPress={() => navigation.navigate('Details', { id: item.id })} style={styles.cardPressable}>
-        <Card>
-          <View style={styles.cardHeader}>
-            <AppText variant="subtitle" numberOfLines={2} style={styles.cardTitle}>
-              {item.sermonTitle}
-            </AppText>
-            {item.favorite ? (
-              <MaterialIcons name="star" size={20} color={theme.colors.primary} />
-            ) : (
-              <MaterialIcons name="star-border" size={20} color={theme.colors.mutedText} />
-            )}
-          </View>
-          <AppText color={theme.colors.mutedText} style={styles.cardMeta} numberOfLines={1}>
-            {item.preacherName} • {item.churchName}
-          </AppText>
-          <AppText color={theme.colors.mutedText} style={styles.cardMeta} numberOfLines={1}>
-            {item.sermonDate}
-            {item.sermonTime ? ` • ${item.sermonTime}` : ''}
-          </AppText>
-          <AppText style={styles.cardMeta} numberOfLines={1}>
-            <AppText variant="caption" color={theme.colors.mutedText}>
-              Versículo base:{' '}
-            </AppText>
-            {item.mainVerse}
-          </AppText>
-        </Card>
-      </Pressable>
-    ),
+    ({ item, index }: { item: SermonNote; index: number }) => {
+      return (
+        <View style={styles.cardPressable}>
+          <SermonCard
+            title={item.sermonTitle}
+            subtitle={`${item.preacherName} • ${item.churchName}`}
+            meta={`${item.sermonDate}${item.sermonTime ? ` • ${item.sermonTime}` : ''}`}
+            favorite={item.favorite}
+            index={index}
+            showVerseLine
+            verseLine={item.mainVerse}
+            onPress={() => navigation.navigate('Details', { id: item.id })}
+          />
+        </View>
+      );
+    },
     [navigation]
   );
 
@@ -81,6 +68,13 @@ export function HomeScreen({ navigation }: Props) {
       }
     >
       <View style={styles.container}>
+        <View style={styles.sectionTitle}>
+          <AppText variant="overline" color={theme.colors.mutedText}>
+            BUSCA LOCAL
+          </AppText>
+          <AppText variant="subtitle">Encontre suas mensagens</AppText>
+        </View>
+
         <View style={styles.searchWrap}>
           <MaterialIcons name="search" size={20} color={theme.colors.mutedText} />
           <TextInput
@@ -101,12 +95,26 @@ export function HomeScreen({ navigation }: Props) {
           </Card>
         ) : items.length === 0 ? (
           <Card>
-            <AppText variant="subtitle">Nenhuma mensagem encontrada</AppText>
-            <AppText color={theme.colors.mutedText} style={styles.paragraph}>
-              {debouncedQuery
-                ? 'Tente buscar por outros termos.'
-                : 'Toque no botão + para criar sua primeira anotação de pregação.'}
-            </AppText>
+            <View style={styles.emptyHeader}>
+              <View style={styles.emptyIcon}>
+                <MaterialIcons name={debouncedQuery ? 'search-off' : 'inbox'} size={22} color={theme.colors.primary} />
+              </View>
+              <View style={styles.emptyText}>
+                <AppText variant="subtitle">
+                  {debouncedQuery ? 'Nada encontrado' : 'Sem mensagens no histórico'}
+                </AppText>
+                <AppText color={theme.colors.mutedText} style={styles.paragraph}>
+                  {debouncedQuery
+                    ? 'Tente buscar por outros termos.'
+                    : 'Crie sua primeira anotação para começar a registrar suas mensagens.'}
+                </AppText>
+              </View>
+            </View>
+            {!debouncedQuery ? (
+              <View style={styles.emptyActions}>
+                <AppButton label="Criar primeira mensagem" iconName="add" onPress={() => navigation.navigate('NewMessage')} />
+              </View>
+            ) : null}
           </Card>
         ) : (
           <FlatList
@@ -130,15 +138,17 @@ export function HomeScreen({ navigation }: Props) {
 const styles = StyleSheet.create({
   container: { flex: 1, paddingTop: theme.spacing.md },
   paragraph: { marginTop: theme.spacing.sm },
+  sectionTitle: { marginBottom: theme.spacing.md },
   searchWrap: {
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: theme.colors.border,
+    borderColor: '#00000012',
     backgroundColor: theme.colors.surface,
-    borderRadius: theme.radius.lg,
+    borderRadius: theme.radius.xl,
     paddingHorizontal: theme.spacing.md,
-    paddingVertical: 10
+    paddingVertical: 12,
+    ...theme.shadow.sm
   },
   searchInput: {
     flex: 1,
@@ -150,7 +160,16 @@ const styles = StyleSheet.create({
   listContent: { paddingBottom: 120 },
   separator: { height: theme.spacing.md },
   cardPressable: {},
-  cardHeader: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between' },
-  cardTitle: { flex: 1, paddingRight: theme.spacing.md },
-  cardMeta: { marginTop: theme.spacing.sm }
+  cardMeta: { marginTop: theme.spacing.sm },
+  emptyHeader: { flexDirection: 'row', alignItems: 'flex-start' },
+  emptyIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: theme.radius.md,
+    backgroundColor: theme.colors.primarySoft,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  emptyText: { flex: 1, paddingLeft: theme.spacing.md },
+  emptyActions: { marginTop: theme.spacing.md }
 });

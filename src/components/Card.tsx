@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
     borderRadius: theme.radius.lg,
     borderWidth: 1,
     borderColor: theme.colors.border,
-    padding: theme.spacing.lg
+    padding: theme.spacing.lg,
+    ...theme.shadow.sm
   }
 });

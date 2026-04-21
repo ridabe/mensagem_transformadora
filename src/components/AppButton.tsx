@@ -1,6 +1,6 @@
 import React from 'react';
 import type { PressableProps } from 'react-native';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 import { theme } from '../theme/theme';
@@ -10,25 +10,36 @@ export type AppButtonProps = PressableProps & {
   label: string;
   variant?: 'primary' | 'secondary' | 'danger' | 'ghost' | 'light' | 'outlineLight';
   iconName?: React.ComponentProps<typeof MaterialIcons>['name'];
+  loading?: boolean;
 };
 
-export function AppButton({ label, variant = 'primary', iconName, disabled, style, ...props }: AppButtonProps) {
+export function AppButton({ label, variant = 'primary', iconName, loading, disabled, style, ...props }: AppButtonProps) {
   const styles = getStyles(variant);
   const iconColor = getIconColor(variant);
+  const spinnerColor = iconColor;
+  const isDisabled = disabled || loading;
 
   return (
     <Pressable
       {...props}
-      disabled={disabled}
-      style={({ pressed }) => [
-        styles.button,
-        pressed && !disabled ? styles.buttonPressed : null,
-        disabled ? styles.buttonDisabled : null,
-        style
-      ]}
+      disabled={isDisabled}
+      style={(state) => {
+        const baseStyle = [
+          styles.button,
+          state.pressed && !isDisabled ? styles.buttonPressed : null,
+          isDisabled ? styles.buttonDisabled : null
+        ];
+
+        const resolvedUserStyle = typeof style === 'function' ? style(state) : style;
+        return [...baseStyle, resolvedUserStyle];
+      }}
     >
       <View style={styles.content}>
-        {iconName ? <MaterialIcons name={iconName} size={18} color={iconColor} style={styles.icon} /> : null}
+        {loading ? (
+          <ActivityIndicator size="small" color={spinnerColor} style={styles.icon} />
+        ) : iconName ? (
+          <MaterialIcons name={iconName} size={18} color={iconColor} style={styles.icon} />
+        ) : null}
         <AppText variant="subtitle" style={styles.label}>
           {label}
         </AppText>

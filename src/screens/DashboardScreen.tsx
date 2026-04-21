@@ -2,6 +2,7 @@ import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import { Card, ScreenLayout } from '../components';
 import { theme } from '../theme/theme';
@@ -142,13 +143,13 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.md,
     height: 10,
     borderRadius: theme.radius.pill,
-    backgroundColor: theme.colors.border,
+    backgroundColor: '#0B122014',
     overflow: 'hidden'
   },
   progressFill: {
     height: 10,
     borderRadius: theme.radius.pill,
-    backgroundColor: theme.colors.primary
+    backgroundColor: theme.colors.gold
   },
   grid: { flexDirection: 'row' },
   gridSpacer: { width: theme.spacing.md },
@@ -168,29 +169,53 @@ function MetricCard({
   iconName: React.ComponentProps<typeof MaterialIcons>['name'];
   tone: 'primary' | 'accent';
 }) {
-  const bg = tone === 'primary' ? theme.colors.primarySoft : theme.colors.accentSoft;
-  const iconBg = tone === 'primary' ? theme.colors.primary : theme.colors.accent;
+  const colors =
+    tone === 'primary'
+      ? (['#071A3A', '#0B2E6F', '#0D47A1'] as const)
+      : (['#0B1220', '#1D1230', '#7E57C2'] as const);
+  const iconBg = theme.colors.gold;
 
   return (
-    <Card style={[metricStyles.card, { backgroundColor: bg, borderColor: bg }]}>
+    <LinearGradient
+      colors={colors}
+      start={{ x: 0.1, y: 0.05 }}
+      end={{ x: 0.9, y: 0.95 }}
+      style={metricStyles.card}
+    >
+      <View pointerEvents="none" style={metricStyles.orb} />
       <View style={metricStyles.header}>
         <View style={[metricStyles.iconWrap, { backgroundColor: iconBg }]}>
           <MaterialIcons name={iconName} size={18} color="#FFFFFF" />
         </View>
-        <AppText variant="caption" color={theme.colors.mutedText}>
+        <AppText variant="caption" style={metricStyles.kicker}>
           {title}
         </AppText>
       </View>
       <AppText style={metricStyles.value}>{value}</AppText>
-      <AppText variant="caption" color={theme.colors.mutedText} style={metricStyles.subtitle}>
+      <AppText variant="caption" style={metricStyles.subtitle}>
         {subtitle}
       </AppText>
-    </Card>
+    </LinearGradient>
   );
 }
 
 const metricStyles = StyleSheet.create({
-  card: { flex: 1 },
+  card: {
+    flex: 1,
+    borderRadius: theme.radius.xl,
+    padding: theme.spacing.lg,
+    overflow: 'hidden',
+    ...theme.shadow.md
+  },
+  orb: {
+    position: 'absolute',
+    right: -70,
+    top: -70,
+    width: 190,
+    height: 190,
+    borderRadius: 95,
+    backgroundColor: '#FFFFFF14'
+  },
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   iconWrap: {
     width: 30,
@@ -199,8 +224,9 @@ const metricStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  value: { fontSize: 34, fontWeight: '800', marginTop: theme.spacing.md, color: theme.colors.text },
-  subtitle: { marginTop: theme.spacing.xs }
+  kicker: { color: '#FFFFFFB3' },
+  value: { fontSize: 36, fontWeight: '800', marginTop: theme.spacing.md, color: '#FFFFFF' },
+  subtitle: { marginTop: theme.spacing.xs, color: '#FFFFFFB3' }
 });
 
 function MiniBarChart({ data }: { data: Array<{ day: string; count: number }> }) {
@@ -211,7 +237,7 @@ function MiniBarChart({ data }: { data: Array<{ day: string; count: number }> })
       {data.map((d, idx) => {
         const height = Math.round((d.count / max) * 72);
         const label = d.day.slice(8, 10);
-        const barColor = idx % 2 === 0 ? theme.colors.primary : theme.colors.accent;
+        const barColor = idx % 2 === 0 ? theme.colors.primaryDark : theme.colors.gold;
         return (
           <View key={d.day} style={chartStyles.item}>
             <View style={chartStyles.barTrack}>
@@ -234,14 +260,14 @@ const chartStyles = StyleSheet.create({
   wrap: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' },
   item: { flex: 1, alignItems: 'center' },
   barTrack: {
-    width: 14,
+    width: 16,
     height: 72,
     borderRadius: theme.radius.pill,
-    backgroundColor: theme.colors.border,
+    backgroundColor: '#0B122014',
     overflow: 'hidden',
     justifyContent: 'flex-end'
   },
-  bar: { width: 14, borderRadius: theme.radius.pill },
+  bar: { width: 16, borderRadius: theme.radius.pill },
   day: { marginTop: theme.spacing.sm },
   count: { marginTop: 2 }
 });

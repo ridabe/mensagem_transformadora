@@ -1,10 +1,12 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import { AppButton, Card, IconButton, ScreenLayout } from '../components';
 import type { HomeStackParamList } from '../navigation/RootNavigator';
 import { sermonNoteRepository } from '../repositories/sermonNoteRepository';
+import { shareSermonNoteAsPdf } from '../services/pdf';
 import { theme } from '../theme/theme';
 import { AppText } from '../components/AppText';
 import type { SermonNote } from '../types/sermon';
@@ -70,6 +72,17 @@ export function MessageDetailsScreen({ navigation, route }: Props) {
     }
   }
 
+  async function handleExportPdf() {
+    if (!note || isWorking) return;
+    try {
+      setIsWorking(true);
+      await shareSermonNoteAsPdf(note);
+    } catch {
+      Alert.alert('Erro', 'Não foi possível gerar o PDF.');
+    } finally {
+      setIsWorking(false);
+    }
+  }
   function handleDelete() {
     if (!note || isWorking) return;
 
@@ -111,6 +124,14 @@ export function MessageDetailsScreen({ navigation, route }: Props) {
       />
       <View style={styles.headerSpacer} />
       <IconButton
+        iconName="picture-as-pdf"
+        accessibilityLabel="Exportar PDF"
+        onPress={handleExportPdf}
+        disabled={status !== 'ready' || !note || isWorking}
+        color={theme.colors.primary}
+      />
+      <View style={styles.headerSpacer} />
+      <IconButton
         iconName="delete"
         accessibilityLabel="Excluir"
         onPress={handleDelete}
@@ -149,25 +170,36 @@ export function MessageDetailsScreen({ navigation, route }: Props) {
         </Card>
       ) : note ? (
         <View>
-          <Card>
-            <AppText variant="subtitle">{note.sermonTitle}</AppText>
-            <AppText color={theme.colors.mutedText} style={styles.paragraph}>
+          <LinearGradient
+            colors={['#071A3A', '#0B2E6F', '#0D47A1'] as const}
+            start={{ x: 0.05, y: 0.05 }}
+            end={{ x: 0.95, y: 0.95 }}
+            style={styles.hero}
+          >
+            <View pointerEvents="none" style={styles.heroOrb} />
+            <AppText variant="overline" style={styles.heroKicker}>
+              DETALHES DA MENSAGEM
+            </AppText>
+            <AppText variant="title" style={styles.heroTitle}>
+              {note.sermonTitle}
+            </AppText>
+            <AppText style={styles.heroMeta} color="#EAF2FF">
               {note.preacherName} • {note.churchName}
             </AppText>
-            <AppText color={theme.colors.mutedText} style={styles.paragraph}>
+            <AppText style={styles.heroMeta} color="#EAF2FF">
               {note.sermonDate}
               {note.sermonTime ? ` • ${note.sermonTime}` : ''}
             </AppText>
-            <AppText style={styles.paragraph}>
-              <AppText variant="caption" color={theme.colors.mutedText}>
+            <AppText style={styles.heroVerse} color="#FFFFFF">
+              <AppText variant="caption" color="#EAF2FF">
                 Versículo base:{' '}
               </AppText>
               {note.mainVerse}
             </AppText>
-            <AppText color={theme.colors.mutedText} style={styles.paragraph}>
+            <AppText variant="caption" style={styles.heroId} color="#FFFFFFB3">
               ID: {note.id}
             </AppText>
-          </Card>
+          </LinearGradient>
 
           <View style={styles.section}>
             <Card>
@@ -297,5 +329,25 @@ const styles = StyleSheet.create({
   block: { marginTop: theme.spacing.md },
   actions: { marginTop: theme.spacing.md },
   headerActions: { flexDirection: 'row', alignItems: 'center' },
-  headerSpacer: { width: 4 }
+  headerSpacer: { width: 4 },
+  hero: {
+    borderRadius: theme.radius.xl,
+    padding: theme.spacing.xl,
+    overflow: 'hidden',
+    ...theme.shadow.md
+  },
+  heroOrb: {
+    position: 'absolute',
+    right: -90,
+    top: -120,
+    width: 240,
+    height: 240,
+    borderRadius: 120,
+    backgroundColor: '#FFFFFF10'
+  },
+  heroKicker: { color: '#FFFFFFB3' },
+  heroTitle: { color: '#FFFFFF', marginTop: theme.spacing.sm },
+  heroMeta: { marginTop: theme.spacing.sm },
+  heroVerse: { marginTop: theme.spacing.md },
+  heroId: { marginTop: theme.spacing.md }
 });

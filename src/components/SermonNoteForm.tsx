@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { Alert, LayoutAnimation, Platform, Pressable, StyleSheet, TextInput, UIManager, View } from 'react-native';
 
 import { theme } from '../theme/theme';
 import { AppButton } from './AppButton';
@@ -42,6 +42,12 @@ export function SermonNoteForm({
   onCancel,
   onSubmit
 }: SermonNoteFormProps) {
+  React.useEffect(() => {
+    if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+      UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+  }, []);
+
   const [userName, setUserName] = React.useState(initialValues.userName);
   const [preacherName, setPreacherName] = React.useState(initialValues.preacherName);
   const [churchName, setChurchName] = React.useState(initialValues.churchName);
@@ -61,6 +67,7 @@ export function SermonNoteForm({
   const [practicalApplications, setPracticalApplications] = React.useState(initialValues.practicalApplications);
   const [conclusion, setConclusion] = React.useState(initialValues.conclusion);
   const [finalSummary, setFinalSummary] = React.useState(initialValues.finalSummary);
+  const placeholderTextColor = theme.colors.mutedText;
 
   async function handleSubmit() {
     if (isSubmitting) return;
@@ -104,13 +111,19 @@ export function SermonNoteForm({
       <Card>
         <AppText variant="subtitle">Identificação</AppText>
         <View style={styles.field}>
-          <AppText variant="caption" style={styles.label}>
+          <AppText variant="overline" style={styles.label}>
             Nome do usuário *
           </AppText>
-          <TextInput value={userName} onChangeText={setUserName} style={styles.input} placeholder="Ex.: Rida" />
+          <TextInput
+            value={userName}
+            onChangeText={setUserName}
+            style={styles.input}
+            placeholder="Ex.: Rida"
+            placeholderTextColor={placeholderTextColor}
+          />
         </View>
         <View style={styles.field}>
-          <AppText variant="caption" style={styles.label}>
+          <AppText variant="overline" style={styles.label}>
             Nome do pregador *
           </AppText>
           <TextInput
@@ -118,10 +131,11 @@ export function SermonNoteForm({
             onChangeText={setPreacherName}
             style={styles.input}
             placeholder="Ex.: Pr. João"
+            placeholderTextColor={placeholderTextColor}
           />
         </View>
         <View style={styles.field}>
-          <AppText variant="caption" style={styles.label}>
+          <AppText variant="overline" style={styles.label}>
             Igreja *
           </AppText>
           <TextInput
@@ -129,6 +143,7 @@ export function SermonNoteForm({
             onChangeText={setChurchName}
             style={styles.input}
             placeholder="Ex.: Igreja Batista Central"
+            placeholderTextColor={placeholderTextColor}
           />
         </View>
       </Card>
@@ -137,7 +152,7 @@ export function SermonNoteForm({
         <AppText variant="subtitle">Dados da pregação</AppText>
         <View style={styles.row}>
           <View style={styles.rowItem}>
-            <AppText variant="caption" style={styles.label}>
+            <AppText variant="overline" style={styles.label}>
               Data {mode === 'create' ? '(automática)' : ''} *
             </AppText>
             <TextInput
@@ -146,11 +161,12 @@ export function SermonNoteForm({
               onChangeText={setSermonDate}
               style={[styles.input, mode === 'create' ? styles.inputDisabled : null]}
               placeholder="YYYY-MM-DD"
+              placeholderTextColor={placeholderTextColor}
               autoCapitalize="none"
             />
           </View>
           <View style={styles.rowItem}>
-            <AppText variant="caption" style={styles.label}>
+            <AppText variant="overline" style={styles.label}>
               Horário (opcional)
             </AppText>
             <TextInput
@@ -158,12 +174,13 @@ export function SermonNoteForm({
               onChangeText={setSermonTime}
               style={styles.input}
               placeholder="HH:MM"
+              placeholderTextColor={placeholderTextColor}
               autoCapitalize="none"
             />
           </View>
         </View>
         <View style={styles.field}>
-          <AppText variant="caption" style={styles.label}>
+          <AppText variant="overline" style={styles.label}>
             Título da pregação *
           </AppText>
           <TextInput
@@ -171,22 +188,32 @@ export function SermonNoteForm({
             onChangeText={setSermonTitle}
             style={styles.input}
             placeholder="Ex.: A fé que transforma"
+            placeholderTextColor={placeholderTextColor}
           />
         </View>
         <View style={styles.field}>
-          <AppText variant="caption" style={styles.label}>
+          <AppText variant="overline" style={styles.label}>
             Versículo base *
           </AppText>
-          <TextInput value={mainVerse} onChangeText={setMainVerse} style={styles.input} placeholder="Ex.: João 3:16" />
+          <TextInput
+            value={mainVerse}
+            onChangeText={setMainVerse}
+            style={styles.input}
+            placeholder="Ex.: João 3:16"
+            placeholderTextColor={placeholderTextColor}
+          />
         </View>
 
         <View style={styles.field}>
           <View style={styles.inlineHeader}>
-            <AppText variant="caption" style={styles.label}>
+            <AppText variant="overline" style={styles.label}>
               Versículos secundários
             </AppText>
             <Pressable
-              onPress={() => setSecondaryVerses((prev) => [...prev, ''])}
+              onPress={() => {
+                LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+                setSecondaryVerses((prev) => [...prev, '']);
+              }}
               style={({ pressed }) => [styles.inlineAction, pressed ? styles.inlineActionPressed : null]}
               disabled={isSubmitting}
             >
@@ -204,13 +231,15 @@ export function SermonNoteForm({
                   onChangeText={(text) => setSecondaryVerses((prev) => prev.map((v, i) => (i === index ? text : v)))}
                   style={[styles.input, styles.dynamicInput]}
                   placeholder={`Versículo ${index + 1}`}
+                  placeholderTextColor={placeholderTextColor}
                 />
                 <IconButton
                   iconName="delete"
                   accessibilityLabel="Remover versículo"
-                  onPress={() =>
-                    setSecondaryVerses((prev) => (prev.length <= 1 ? [''] : prev.filter((_, i) => i !== index)))
-                  }
+                  onPress={() => {
+                    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+                    setSecondaryVerses((prev) => (prev.length <= 1 ? [''] : prev.filter((_, i) => i !== index)));
+                  }}
                   disabled={isSubmitting}
                 />
               </View>
@@ -222,7 +251,7 @@ export function SermonNoteForm({
       <Card>
         <AppText variant="subtitle">Introdução</AppText>
         <View style={styles.field}>
-          <AppText variant="caption" style={styles.label}>
+          <AppText variant="overline" style={styles.label}>
             Texto (opcional)
           </AppText>
           <TextInput
@@ -230,6 +259,7 @@ export function SermonNoteForm({
             onChangeText={setIntroduction}
             style={[styles.input, styles.textarea]}
             placeholder="Escreva a introdução..."
+            placeholderTextColor={placeholderTextColor}
             multiline
             textAlignVertical="top"
           />
@@ -240,7 +270,10 @@ export function SermonNoteForm({
         <View style={styles.inlineHeader}>
           <AppText variant="subtitle">Pontos principais</AppText>
           <Pressable
-            onPress={() => setKeyPoints((prev) => [...prev, { id: createId(), title: '', content: '' }])}
+            onPress={() => {
+              LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+              setKeyPoints((prev) => [...prev, { id: createId(), title: '', content: '' }]);
+            }}
             style={({ pressed }) => [styles.inlineAction, pressed ? styles.inlineActionPressed : null]}
             disabled={isSubmitting}
           >
@@ -254,13 +287,16 @@ export function SermonNoteForm({
           {keyPoints.map((p, index) => (
             <View key={p.id} style={styles.pointBlock}>
               <View style={styles.pointHeader}>
-                <AppText variant="caption" style={styles.label}>
+                <AppText variant="overline" style={styles.label}>
                   Ponto {index + 1}
                 </AppText>
                 <IconButton
                   iconName="delete"
                   accessibilityLabel="Remover ponto"
-                  onPress={() => setKeyPoints((prev) => (prev.length <= 1 ? prev : prev.filter((x) => x.id !== p.id)))}
+                  onPress={() => {
+                    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+                    setKeyPoints((prev) => (prev.length <= 1 ? prev : prev.filter((x) => x.id !== p.id)));
+                  }}
                   disabled={isSubmitting || keyPoints.length <= 1}
                 />
               </View>
@@ -269,14 +305,14 @@ export function SermonNoteForm({
                 onChangeText={(text) => setKeyPoints((prev) => prev.map((x) => (x.id === p.id ? { ...x, title: text } : x)))}
                 style={styles.input}
                 placeholder="Título do ponto"
+                placeholderTextColor={placeholderTextColor}
               />
               <TextInput
                 value={p.content}
-                onChangeText={(text) =>
-                  setKeyPoints((prev) => prev.map((x) => (x.id === p.id ? { ...x, content: text } : x)))
-                }
+                onChangeText={(text) => setKeyPoints((prev) => prev.map((x) => (x.id === p.id ? { ...x, content: text } : x)))}
                 style={[styles.input, styles.textarea]}
                 placeholder="Conteúdo do ponto"
+                placeholderTextColor={placeholderTextColor}
                 multiline
                 textAlignVertical="top"
               />
@@ -288,7 +324,7 @@ export function SermonNoteForm({
       <Card>
         <AppText variant="subtitle">Frases marcantes</AppText>
         <View style={styles.field}>
-          <AppText variant="caption" style={styles.label}>
+          <AppText variant="overline" style={styles.label}>
             Uma frase por linha (opcional)
           </AppText>
           <TextInput
@@ -296,6 +332,7 @@ export function SermonNoteForm({
             onChangeText={setHighlightedPhrasesText}
             style={[styles.input, styles.textarea]}
             placeholder="Escreva frases marcantes...\nEx.: “Deus age no secreto.”"
+            placeholderTextColor={placeholderTextColor}
             multiline
             textAlignVertical="top"
           />
@@ -305,7 +342,7 @@ export function SermonNoteForm({
       <Card>
         <AppText variant="subtitle">Anotações</AppText>
         <View style={styles.field}>
-          <AppText variant="caption" style={styles.label}>
+          <AppText variant="overline" style={styles.label}>
             Observações pessoais (opcional)
           </AppText>
           <TextInput
@@ -313,12 +350,13 @@ export function SermonNoteForm({
             onChangeText={setPersonalObservations}
             style={[styles.input, styles.textarea]}
             placeholder="Suas observações..."
+            placeholderTextColor={placeholderTextColor}
             multiline
             textAlignVertical="top"
           />
         </View>
         <View style={styles.field}>
-          <AppText variant="caption" style={styles.label}>
+          <AppText variant="overline" style={styles.label}>
             Aplicações práticas (opcional)
           </AppText>
           <TextInput
@@ -326,12 +364,13 @@ export function SermonNoteForm({
             onChangeText={setPracticalApplications}
             style={[styles.input, styles.textarea]}
             placeholder="Como aplicar isso no dia a dia..."
+            placeholderTextColor={placeholderTextColor}
             multiline
             textAlignVertical="top"
           />
         </View>
         <View style={styles.field}>
-          <AppText variant="caption" style={styles.label}>
+          <AppText variant="overline" style={styles.label}>
             Conclusão (opcional)
           </AppText>
           <TextInput
@@ -339,6 +378,7 @@ export function SermonNoteForm({
             onChangeText={setConclusion}
             style={[styles.input, styles.textarea]}
             placeholder="Escreva a conclusão..."
+            placeholderTextColor={placeholderTextColor}
             multiline
             textAlignVertical="top"
           />
@@ -348,7 +388,7 @@ export function SermonNoteForm({
       <Card>
         <AppText variant="subtitle">Resumo final</AppText>
         <View style={styles.field}>
-          <AppText variant="caption" style={styles.label}>
+          <AppText variant="overline" style={styles.label}>
             Opcional (pode ser gerado no Módulo 6)
           </AppText>
           <TextInput
@@ -356,6 +396,7 @@ export function SermonNoteForm({
             onChangeText={setFinalSummary}
             style={[styles.input, styles.textarea]}
             placeholder="Resumo final..."
+            placeholderTextColor={placeholderTextColor}
             multiline
             textAlignVertical="top"
           />
@@ -363,7 +404,7 @@ export function SermonNoteForm({
       </Card>
 
       <View style={styles.actions}>
-        <AppButton label={isSubmitting ? 'Salvando...' : submitLabel} onPress={handleSubmit} disabled={isSubmitting} />
+        <AppButton label={submitLabel} onPress={handleSubmit} loading={isSubmitting} />
         <View style={styles.spacer} />
         <AppButton label="Cancelar" variant="ghost" onPress={onCancel} disabled={isSubmitting} />
       </View>
@@ -377,15 +418,15 @@ const styles = StyleSheet.create({
   label: { color: theme.colors.mutedText, marginBottom: theme.spacing.xs },
   input: {
     borderWidth: 1,
-    borderColor: theme.colors.border,
+    borderColor: '#00000014',
     backgroundColor: theme.colors.surface,
-    borderRadius: theme.radius.md,
+    borderRadius: theme.radius.lg,
     paddingHorizontal: theme.spacing.md,
     paddingVertical: 12,
     color: theme.colors.text
   },
   inputDisabled: { opacity: 0.7 },
-  textarea: { minHeight: 110, paddingTop: 12 },
+  textarea: { minHeight: 130, paddingTop: 12 },
   row: { flexDirection: 'row', gap: theme.spacing.md },
   rowItem: { flex: 1 },
   inlineHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },

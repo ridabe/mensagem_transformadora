@@ -6,6 +6,7 @@ import React from 'react';
 import { DashboardScreen } from '../screens/DashboardScreen';
 import { EditMessageScreen } from '../screens/EditMessageScreen';
 import { HomeScreen } from '../screens/HomeScreen';
+import { GuideScreen } from '../screens/GuideScreen';
 import { MessageDetailsScreen } from '../screens/MessageDetailsScreen';
 import { NewMessageScreen } from '../screens/NewMessageScreen';
 import { StartScreen } from '../screens/StartScreen';
@@ -23,6 +24,7 @@ export type HomeStackParamList = {
 
 export type RootTabParamList = {
   HomeStack: undefined;
+  Guide: undefined;
   Dashboard: undefined;
 };
 
@@ -31,7 +33,7 @@ const HomeStack = createNativeStackNavigator<HomeStackParamList>();
 
 function HomeStackNavigator() {
   return (
-    <HomeStack.Navigator screenOptions={{ headerShown: false }}>
+    <HomeStack.Navigator screenOptions={{ headerShown: false, animation: 'fade' }}>
       <HomeStack.Screen name="Home" component={StartScreen} />
       <HomeStack.Screen name="History" component={HomeScreen} />
       <HomeStack.Screen name="NewMessage" component={NewMessageScreen} />
@@ -58,6 +60,14 @@ export function RootNavigator() {
         options={{
           title: 'Início',
           tabBarIcon: ({ color, size }) => <MaterialIcons name="home" color={color} size={size} />
+        }}
+      />
+      <Tab.Screen
+        name="Guide"
+        component={GuideScreen}
+        options={{
+          title: 'Guia',
+          tabBarIcon: ({ color, size }) => <MaterialIcons name="menu-book" color={color} size={size} />
         }}
       />
       <Tab.Screen
