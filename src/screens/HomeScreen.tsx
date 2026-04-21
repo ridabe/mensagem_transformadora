@@ -68,6 +68,13 @@ export function HomeScreen({ navigation }: Props) {
       }
     >
       <View style={styles.container}>
+        <View style={styles.sectionTitle}>
+          <AppText variant="overline" color={theme.colors.mutedText}>
+            BUSCA LOCAL
+          </AppText>
+          <AppText variant="subtitle">Encontre suas mensagens</AppText>
+        </View>
+
         <View style={styles.searchWrap}>
           <MaterialIcons name="search" size={20} color={theme.colors.mutedText} />
           <TextInput
@@ -131,15 +138,17 @@ export function HomeScreen({ navigation }: Props) {
 const styles = StyleSheet.create({
   container: { flex: 1, paddingTop: theme.spacing.md },
   paragraph: { marginTop: theme.spacing.sm },
+  sectionTitle: { marginBottom: theme.spacing.md },
   searchWrap: {
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: theme.colors.border,
+    borderColor: '#00000012',
     backgroundColor: theme.colors.surface,
-    borderRadius: theme.radius.lg,
+    borderRadius: theme.radius.xl,
     paddingHorizontal: theme.spacing.md,
-    paddingVertical: 10
+    paddingVertical: 12,
+    ...theme.shadow.sm
   },
   searchInput: {
     flex: 1,

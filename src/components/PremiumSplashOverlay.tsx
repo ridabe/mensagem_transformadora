@@ -8,6 +8,7 @@ import { AppText } from './AppText';
 export type PremiumSplashOverlayProps = {
   visible: boolean;
   durationMs?: number;
+  canFinish?: boolean;
   onRequestHideNativeSplash?: () => void;
   onFinished: () => void;
 };
@@ -15,6 +16,7 @@ export type PremiumSplashOverlayProps = {
 export function PremiumSplashOverlay({
   visible,
   durationMs = 2400,
+  canFinish = true,
   onRequestHideNativeSplash,
   onFinished
 }: PremiumSplashOverlayProps) {
@@ -22,6 +24,8 @@ export function PremiumSplashOverlay({
   const scale = React.useRef(new Animated.Value(0.985)).current;
 
   const didRunRef = React.useRef(false);
+  const minElapsedRef = React.useRef(false);
+  const fadeOutStartedRef = React.useRef(false);
 
   React.useEffect(() => {
     if (!visible) return;
@@ -30,19 +34,43 @@ export function PremiumSplashOverlay({
 
     onRequestHideNativeSplash?.();
 
+    const fadeInMs = 420;
+    const fadeOutMs = 420;
+    const holdMs = Math.max(0, durationMs - fadeInMs - fadeOutMs);
+
     const fadeIn = Animated.parallel([
-      Animated.timing(opacity, { toValue: 1, duration: 520, useNativeDriver: true }),
-      Animated.timing(scale, { toValue: 1, duration: 680, useNativeDriver: true })
+      Animated.timing(opacity, { toValue: 1, duration: fadeInMs, useNativeDriver: true }),
+      Animated.timing(scale, { toValue: 1, duration: 560, useNativeDriver: true })
     ]);
 
-    const hold = Animated.delay(Math.max(0, durationMs - 520 - 520));
+    const hold = Animated.delay(holdMs);
 
-    const fadeOut = Animated.timing(opacity, { toValue: 0, duration: 520, useNativeDriver: true });
+    const startFadeOut = () => {
+      if (fadeOutStartedRef.current) return;
+      fadeOutStartedRef.current = true;
+      Animated.timing(opacity, { toValue: 0, duration: fadeOutMs, useNativeDriver: true }).start(({ finished }) => {
+        if (finished) onFinished();
+      });
+    };
 
-    Animated.sequence([fadeIn, hold, fadeOut]).start(({ finished }) => {
+    Animated.sequence([fadeIn, hold]).start(({ finished }) => {
+      if (!finished) return;
+      minElapsedRef.current = true;
+      if (canFinish) startFadeOut();
+    });
+  }, [canFinish, durationMs, onFinished, onRequestHideNativeSplash, opacity, scale, visible]);
+
+  React.useEffect(() => {
+    if (!visible) return;
+    if (!minElapsedRef.current) return;
+    if (!canFinish) return;
+    if (fadeOutStartedRef.current) return;
+
+    fadeOutStartedRef.current = true;
+    Animated.timing(opacity, { toValue: 0, duration: 420, useNativeDriver: true }).start(({ finished }) => {
       if (finished) onFinished();
     });
-  }, [durationMs, onFinished, onRequestHideNativeSplash, opacity, scale, visible]);
+  }, [canFinish, onFinished, opacity, visible]);
 
   if (!visible) return null;
 

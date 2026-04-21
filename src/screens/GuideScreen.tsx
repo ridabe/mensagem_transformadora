@@ -1,6 +1,7 @@
 import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import { AppText, Card, ScreenLayout } from '../components';
 import { theme } from '../theme/theme';
@@ -8,19 +9,28 @@ import { theme } from '../theme/theme';
 export function GuideScreen() {
   return (
     <ScreenLayout title="Guia" scroll contentStyle={styles.content}>
-      <View style={styles.hero}>
-        <View style={styles.heroIcon}>
-          <MaterialIcons name="menu-book" size={22} color="#FFFFFF" />
+      <LinearGradient
+        colors={['#071A3A', '#0B2E6F', '#0D47A1'] as const}
+        start={{ x: 0.05, y: 0.05 }}
+        end={{ x: 0.95, y: 0.95 }}
+        style={styles.hero}
+      >
+        <View pointerEvents="none" style={styles.heroGold} />
+        <View pointerEvents="none" style={styles.heroOrb} />
+        <View style={styles.heroRow}>
+          <View style={styles.heroIcon}>
+            <MaterialIcons name="menu-book" size={22} color="#071A3A" />
+          </View>
+          <View style={styles.heroText}>
+            <AppText variant="title" style={styles.heroTitle}>
+              Como usar o app
+            </AppText>
+            <AppText color="#EAF2FF" style={styles.heroSubtitle}>
+              Instruções rápidas por tela, com pontos importantes destacados.
+            </AppText>
+          </View>
         </View>
-        <View style={styles.heroText}>
-          <AppText variant="title" style={styles.heroTitle}>
-            Como usar o app
-          </AppText>
-          <AppText color="#EAF2FF" style={styles.heroSubtitle}>
-            Instruções rápidas por tela, com pontos importantes destacados.
-          </AppText>
-        </View>
-      </View>
+      </LinearGradient>
 
       <View style={styles.noticeRow}>
         <InfoPill iconName="wifi-off" text="100% offline" tone="primary" />
@@ -184,17 +194,35 @@ function InfoPill({
 const styles = StyleSheet.create({
   content: { paddingTop: theme.spacing.md, paddingBottom: 120 },
   hero: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: theme.colors.primary,
-    borderRadius: theme.radius.lg,
-    padding: theme.spacing.lg
+    borderRadius: theme.radius.xl,
+    padding: theme.spacing.xl,
+    overflow: 'hidden',
+    ...theme.shadow.md
+  },
+  heroRow: { flexDirection: 'row', alignItems: 'center' },
+  heroGold: {
+    position: 'absolute',
+    left: -140,
+    bottom: -160,
+    width: 260,
+    height: 260,
+    borderRadius: 130,
+    backgroundColor: '#D7B15A22'
+  },
+  heroOrb: {
+    position: 'absolute',
+    right: -90,
+    top: -110,
+    width: 240,
+    height: 240,
+    borderRadius: 120,
+    backgroundColor: '#FFFFFF10'
   },
   heroIcon: {
     width: 44,
     height: 44,
     borderRadius: theme.radius.md,
-    backgroundColor: '#FFFFFF26',
+    backgroundColor: '#D7B15A',
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -238,4 +266,3 @@ const styles = StyleSheet.create({
   bullet: { width: 8, height: 8, borderRadius: 4, marginTop: 6, marginRight: theme.spacing.sm },
   listText: { flex: 1 }
 });
-

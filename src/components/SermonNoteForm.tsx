@@ -309,9 +309,7 @@ export function SermonNoteForm({
               />
               <TextInput
                 value={p.content}
-                onChangeText={(text) =>
-                  setKeyPoints((prev) => prev.map((x) => (x.id === p.id ? { ...x, content: text } : x)))
-                }
+                onChangeText={(text) => setKeyPoints((prev) => prev.map((x) => (x.id === p.id ? { ...x, content: text } : x)))}
                 style={[styles.input, styles.textarea]}
                 placeholder="Conteúdo do ponto"
                 placeholderTextColor={placeholderTextColor}
@@ -466,3 +464,4 @@ function createId(): string {
   const random = Math.random().toString(36).slice(2, 10);
   return `${Date.now().toString(36)}${random}`;
 }
+
