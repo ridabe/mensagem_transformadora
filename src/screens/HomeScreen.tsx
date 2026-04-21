@@ -29,6 +29,8 @@ export function HomeScreen({ navigation }: Props) {
     try {
       const data = await sermonNoteRepository.list({ searchText: debouncedQuery, limit: 500, offset: 0 });
       setItems(data);
+    } catch {
+      setItems([]);
     } finally {
       setStatus('ready');
     }
