@@ -115,6 +115,7 @@ Este guia explica como usar cada tela do aplicativo **Mensagem Transformadora**.
 **Como usar**
 - Acesse pelo ícone **(i)** na tela Início.
 - Consulte versão, autor, empresa e licença.
+- Em **Dados**, toque em **Backup e Restauração** para exportar/importar um arquivo de backup (Android).
 
 ---
 
@@ -125,4 +126,28 @@ Este guia explica como usar cada tela do aplicativo **Mensagem Transformadora**.
 **Como funciona**
 - Ao abrir o app, o logo aparece centralizado por alguns segundos enquanto o app inicializa.
 - A transição para a tela Início ocorre automaticamente.
+
+---
+
+## 10) Backup e Restauração (Android)
+
+**Objetivo**: exportar seus dados do app para um arquivo e restaurar quando necessário (ex.: ao trocar/reinstalar o aparelho).
+
+**Como acessar**
+- Abra **Início** → toque no ícone **(i)** → **Sobre o Aplicativo**.
+- Na seção **Dados**, toque em **Backup e Restauração**.
+
+**Exportar backup**
+- Toque em **Exportar backup**.
+- Escolha uma pasta (ex.: **Downloads**, **Google Drive**, cartão SD).
+- O app cria um arquivo `.mtbackup` e registra no **Histórico**.
+
+**Importar / Restaurar backup**
+- Toque em **Importar backup**.
+- Selecione um arquivo `.mtbackup`.
+- Confirme a ação: os dados atuais do app serão **substituídos** pelos dados do backup.
+
+**Dicas**
+- Guarde backups em mais de um local (ex.: Drive + Downloads).
+- Se após restaurar alguma tela não atualizar, feche e abra o app novamente.
 

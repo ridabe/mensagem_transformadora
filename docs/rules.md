@@ -127,6 +127,21 @@ A entidade central do sistema é a **Anotação de Pregação** (Sermon Note), c
   - Deve manter tempo de exibição entre 2 e 3 segundos, sem travar o app.
   - Deve ocultar automaticamente após a inicialização do app (incluindo inicialização do banco local).
 
+### F10. Backup e Restauração (Android)
+- **Objetivo**: Permitir que o usuário exporte seus dados para um arquivo e restaure quando precisar reinstalar o app, mantendo o uso offline.
+- **Acesso**:
+  - A partir da tela **Sobre o Aplicativo**, na seção **Dados**, via botão **Backup e Restauração**.
+- **Regras de exportação**:
+  - Disponível apenas no **Android** (por arquivo, via Storage Access Framework).
+  - Ao exportar, o app deve gerar um arquivo com extensão `.mtbackup` em uma pasta escolhida pelo usuário.
+  - O export deve registrar um item no histórico local (`backup_history`) com data/hora, nome e URI do arquivo.
+- **Regras de importação/restauração**:
+  - Disponível apenas no **Android**.
+  - Deve exigir confirmação explícita, pois a restauração **substitui** os dados atuais do app.
+  - Após restaurar, o app deve reinicializar o banco/migrations e registrar no histórico local (`backup_history`) como `kind = import`.
+- **Histórico**:
+  - A tela deve listar exportações e importações, ordenadas do mais recente para o mais antigo.
+
 ---
 
 ## 4. Regras Técnicas e de Arquitetura

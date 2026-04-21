@@ -117,3 +117,10 @@ F10. Guia de uso (Instruções)
 F11. Splash Screen
 
 - Tela inicial com logo centralizado e transição suave para a tela inicial.
+
+F12. Backup e restauração (Android)
+
+- O usuário deve conseguir **exportar** seus dados locais para um arquivo de backup (extensão `.mtbackup`) em uma pasta escolhida.
+- O usuário deve conseguir **importar/restaurar** um backup selecionando um arquivo, substituindo os dados atuais do app.
+- A restauração deve exigir confirmação explícita (ação destrutiva).
+- O app deve manter um **histórico local** de exportações/importações para referência do usuário.

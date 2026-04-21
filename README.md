@@ -12,6 +12,16 @@ Ele foi construído sob uma arquitetura 100% **offline-first**, garantindo total
 - **Dashboard analítico**: Acompanhe o total de mensagens, proporção de favoritos e gráficos interativos (Top Pregadores, Igrejas e volume semanal).
 - **Ações rápidas**: Favoritar, duplicar (para criar templates base) e excluir com segurança.
 - **Busca eficiente**: Encontre anotações pelo título, pregador, igreja ou trechos de versículos.
+- **Backup e restauração (Android)**: Exporte seus dados para um arquivo e restaure quando reinstalar o app (sem internet e sem nuvem obrigatória).
+
+## 💾 Backup e Restauração (Android)
+
+O app permite exportar/importar o banco local (SQLite) como um arquivo para você guardar em um local seguro.
+
+- **Como acessar**: Início → ícone **(i)** → **Sobre o Aplicativo** → seção **Dados** → **Backup e Restauração**
+- **Exportar**: escolha uma pasta e salve um arquivo no formato `.mtbackup` (ex.: `mensagem-transformadora-backup_2026-04-21T12-34-56-789Z.mtbackup`).
+- **Importar/Restaurar**: selecione um arquivo de backup e substitua os dados atuais do app.
+- **Atenção**: restaurar um backup **substitui** os dados atuais. Guarde backups em locais confiáveis (Google Drive, Downloads, cartão SD).
 
 ## 🛠️ Tecnologias e Arquitetura
 
