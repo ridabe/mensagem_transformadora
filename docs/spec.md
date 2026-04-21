@@ -153,6 +153,13 @@ Clica em “Exportar PDF”
 Sistema gera o documento localmente
 Usuário compartilha ou salva
 
+Fluxo 5 — Backup e restauração (Android)
+Usuário acessa “Sobre o Aplicativo”
+Clica em “Backup e Restauração”
+Para exportar: escolhe uma pasta e o app salva um arquivo `.mtbackup`
+Para restaurar: seleciona um arquivo de backup e confirma a substituição dos dados
+Sistema reinicializa o banco local e reaplica migrations
+
 
 
 
@@ -248,6 +255,24 @@ CREATE TABLE secondary\_verses (
 );
 
 CREATE INDEX idx\_secondary\_verses\_note ON secondary\_verses(sermon\_note\_id);
+
+Tabela backup\_history
+
+CREATE TABLE backup\_history (
+
+&#x20; id TEXT PRIMARY KEY NOT NULL,
+
+&#x20; kind TEXT NOT NULL,
+
+&#x20; file\_name TEXT NOT NULL,
+
+&#x20; file\_uri TEXT NOT NULL,
+
+&#x20; created\_at TEXT NOT NULL
+
+);
+
+CREATE INDEX idx\_backup\_history\_created\_at ON backup\_history(created\_at);
 
 6\. Módulos do sistema
 
