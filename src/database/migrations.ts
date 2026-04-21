@@ -66,9 +66,28 @@ const migrations: Migration[] = [
       CREATE INDEX IF NOT EXISTS idx_secondary_verses_note ON secondary_verses(sermon_note_id);
       `
     ]
+  },
+  {
+    version: 2,
+    up: [
+      `
+      CREATE TABLE IF NOT EXISTS backup_history (
+        id TEXT PRIMARY KEY NOT NULL,
+        file_name TEXT NOT NULL,
+        file_uri TEXT NOT NULL,
+        created_at TEXT NOT NULL
+      );
+      `,
+      `
+      CREATE INDEX IF NOT EXISTS idx_backup_history_created_at ON backup_history(created_at);
+      `
+    ]
   }
 ];
 
+/**
+ * Inicializa o banco local aplicando pragmas e migrations pendentes de forma transacional.
+ */
 export async function initializeDatabase(): Promise<void> {
   await configureDbPragmas();
   const db = await getDb();
@@ -90,6 +109,9 @@ export async function initializeDatabase(): Promise<void> {
       }
       await tx.runAsync('INSERT INTO schema_migrations (version) VALUES (?);', migration.version);
     }
+
+    try {
+      await tx.execAsync(`ALTER TABLE backup_history ADD COLUMN kind TEXT NOT NULL DEFAULT 'export';`);
+    } catch {}
   });
 }
-

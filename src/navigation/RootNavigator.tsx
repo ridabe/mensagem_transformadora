@@ -11,6 +11,7 @@ import { MessageDetailsScreen } from '../screens/MessageDetailsScreen';
 import { NewMessageScreen } from '../screens/NewMessageScreen';
 import { StartScreen } from '../screens/StartScreen';
 import { AboutScreen } from '../screens/AboutScreen';
+import { BackupScreen } from '../screens/BackupScreen';
 import { theme } from '../theme/theme';
 
 export type HomeStackParamList = {
@@ -20,6 +21,7 @@ export type HomeStackParamList = {
   Details: { id: string };
   Edit: { id: string };
   About: undefined;
+  Backup: undefined;
 };
 
 export type RootTabParamList = {
@@ -40,6 +42,7 @@ function HomeStackNavigator() {
       <HomeStack.Screen name="Details" component={MessageDetailsScreen} />
       <HomeStack.Screen name="Edit" component={EditMessageScreen} />
       <HomeStack.Screen name="About" component={AboutScreen} />
+      <HomeStack.Screen name="Backup" component={BackupScreen} />
     </HomeStack.Navigator>
   );
 }
