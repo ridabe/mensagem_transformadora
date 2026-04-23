@@ -14,7 +14,29 @@
       "adaptiveIcon": {
         "foregroundImage": "./img/adaptive-icon.png",
         "backgroundColor": "#071A3A"
-      }
+      },
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ],
+          "data": [
+            {
+              "scheme": "https",
+              "host": "mensagemtransformadora.com.br",
+              "pathPrefix": "/"
+            },
+            {
+              "scheme": "https",
+              "host": "www.mensagemtransformadora.com.br",
+              "pathPrefix": "/"
+            }
+          ]
+        }
+      ]
     },
     "jsEngine": "hermes",
     "assetBundlePatterns": [
