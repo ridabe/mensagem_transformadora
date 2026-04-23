@@ -142,6 +142,20 @@ A entidade central do sistema é a **Anotação de Pregação** (Sermon Note), c
 - **Histórico**:
   - A tela deve listar exportações e importações, ordenadas do mais recente para o mais antigo.
 
+### F11. Avaliação na Play Store (Android)
+- **Objetivo**: Solicitar avaliação do app via Google Play In-App Review, com controle rígido de exibição por regra de negócio (sem inventar confirmação).
+- **Regras de tempo (obrigatórias)**:
+  - O app não pode exibir a solicitação antes de completar **3 dias** após o primeiro uso (`first_open_at`).
+  - Se não houver confirmação rastreável de avaliação, uma nova tentativa só pode ocorrer **após mais 3 dias** (`next_review_at`).
+  - Se `review_status = rated_confirmed`, nunca exibir novamente.
+- **Modal customizado (obrigatório antes da API)**:
+  - O app deve exibir um modal com: “Avaliar agora”, “Lembrar depois” e “Já avaliei”.
+  - “Avaliar agora” deve tentar abrir o review nativo; se indisponível, abrir a página do app na Play Store.
+  - “Lembrar depois” deve registrar adiamento e reagendar para +3 dias.
+  - “Já avaliei” deve registrar `rated_confirmed` (confirmação rastreável no fluxo).
+- **Observação técnica**:
+  - A API da Google Play pode decidir não exibir o diálogo, e não informa com confiabilidade se o usuário concluiu a avaliação. O controle de negócio deve ser 100% local.
+
 ---
 
 ## 4. Regras Técnicas e de Arquitetura

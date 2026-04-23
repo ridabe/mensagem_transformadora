@@ -2,7 +2,7 @@
   "expo": {
     "name": "Mensagem Transformadora",
     "slug": "mensagem-transformadora",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "icon": "./img/icon.png",
     "orientation": "portrait",
     "platforms": [
@@ -38,6 +38,9 @@
       "eas": {
         "projectId": "8d2903af-1918-4196-9a01-90898f46807e"
       }
+    },
+    "ios": {
+      "bundleIdentifier": "n"
     }
   }
 }

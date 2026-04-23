@@ -3,7 +3,8 @@ import React from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { AppButton, Card, IconButton, ScreenLayout } from '../components';
+import { AppButton, Card, IconButton, ReviewPromptModal, ScreenLayout } from '../components';
+import { useInAppReview } from '../hooks/useInAppReview';
 import type { HomeStackParamList } from '../navigation/RootNavigator';
 import { sermonNoteRepository } from '../repositories/sermonNoteRepository';
 import { shareSermonNoteAsPdf } from '../services/pdf';
@@ -18,6 +19,8 @@ export function MessageDetailsScreen({ navigation, route }: Props) {
   const [note, setNote] = React.useState<SermonNote | null>(null);
   const [status, setStatus] = React.useState<'loading' | 'ready' | 'not_found'>('loading');
   const [isWorking, setIsWorking] = React.useState(false);
+  const { requestPrompt, visible, isWorking: isReviewWorking, handleReviewNow, handleReviewLater, handleAlreadyReviewed } =
+    useInAppReview();
 
   React.useEffect(() => {
     let cancelled = false;
@@ -77,6 +80,7 @@ export function MessageDetailsScreen({ navigation, route }: Props) {
     try {
       setIsWorking(true);
       await shareSermonNoteAsPdf(note);
+      requestPrompt('positive_action').catch(() => {});
     } catch {
       Alert.alert('Erro', 'Não foi possível gerar o PDF.');
     } finally {
@@ -311,6 +315,14 @@ export function MessageDetailsScreen({ navigation, route }: Props) {
           </View>
         </View>
       ) : null}
+
+      <ReviewPromptModal
+        visible={visible}
+        isWorking={isReviewWorking}
+        onReviewNow={() => handleReviewNow().catch(() => {})}
+        onReviewLater={() => handleReviewLater().catch(() => {})}
+        onAlreadyReviewed={() => handleAlreadyReviewed().catch(() => {})}
+      />
 
       <View style={styles.actions}>
         <AppButton label="Voltar" variant="ghost" onPress={() => navigation.goBack()} disabled={isWorking} />
