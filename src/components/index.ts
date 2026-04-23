@@ -7,3 +7,4 @@ export { IconButton } from './IconButton';
 export { ScreenLayout } from './ScreenLayout';
 export { SermonNoteForm } from './SermonNoteForm';
 export { SermonCard } from './SermonCard';
+export { ReviewPromptModal } from './ReviewPromptModal';

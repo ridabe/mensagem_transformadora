@@ -6,6 +6,7 @@ import React from 'react';
 import { PremiumSplashOverlay } from './src/components/PremiumSplashOverlay';
 import { initializeDatabase } from './src/database/migrations';
 import { RootNavigator } from './src/navigation/RootNavigator';
+import { reviewService } from './src/services/review/reviewService';
 import { navigationTheme } from './src/theme/navigationTheme';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
@@ -14,6 +15,10 @@ export default function App() {
   const [ready, setReady] = React.useState(false);
   const [showPremiumSplash, setShowPremiumSplash] = React.useState(true);
   const readyRef = React.useRef(false);
+
+  React.useEffect(() => {
+    reviewService.registerFirstAppOpen().catch(() => {});
+  }, []);
 
   React.useEffect(() => {
     let cancelled = false;

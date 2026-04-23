@@ -13,6 +13,7 @@ Este guia explica como usar cada tela do aplicativo **Mensagem Transformadora**.
 - Toque em **Ver histórico** para acessar a lista completa.
 - Em **Últimas mensagens**, toque em qualquer card para abrir os **Detalhes**.
 - No ícone de **informação (i)** no topo, acesse a tela **Sobre o Aplicativo**.
+- Após alguns dias de uso, o app pode perguntar se você deseja avaliar na Play Store (modal discreto).
 
 ---
 
@@ -68,6 +69,7 @@ Este guia explica como usar cada tela do aplicativo **Mensagem Transformadora**.
 **Como usar**
 - Role para ver as seções (versículos, pontos principais, frases marcantes, anotações e resumo final).
 - Toque em **Voltar** para retornar à tela anterior.
+- Dica: após exportar PDF, o app pode sugerir uma avaliação na Play Store (seguindo regras de tempo).
 
 ---
 

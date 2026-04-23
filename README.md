@@ -13,6 +13,7 @@ Ele foi construído sob uma arquitetura 100% **offline-first**, garantindo total
 - **Ações rápidas**: Favoritar, duplicar (para criar templates base) e excluir com segurança.
 - **Busca eficiente**: Encontre anotações pelo título, pregador, igreja ou trechos de versículos.
 - **Backup e restauração (Android)**: Exporte seus dados para um arquivo e restaure quando reinstalar o app (sem internet e sem nuvem obrigatória).
+- **Avaliação na Play Store (Android)**: Modal próprio + solicitação via In-App Review, com regra rígida de 3 dias entre tentativas.
 
 ## 💾 Backup e Restauração (Android)
 
@@ -22,6 +23,19 @@ O app permite exportar/importar o banco local (SQLite) como um arquivo para voc�
 - **Exportar**: escolha uma pasta e salve um arquivo no formato `.mtbackup` (ex.: `mensagem-transformadora-backup_2026-04-21T12-34-56-789Z.mtbackup`).
 - **Importar/Restaurar**: selecione um arquivo de backup e substitua os dados atuais do app.
 - **Atenção**: restaurar um backup **substitui** os dados atuais. Guarde backups em locais confiáveis (Google Drive, Downloads, cartão SD).
+
+## ⭐ Avaliação na Play Store (Android)
+
+O app possui um fluxo de avaliação in-app (com modal customizado) que segue uma regra rígida de exibição:
+
+- **Nunca exibe antes de 3 dias** do primeiro uso (`first_open_at`).
+- Depois disso, pode tentar exibir em momentos apropriados (ex.: ao entrar na Início, ou após uma ação positiva como exportar PDF).
+- Se o usuário não confirmar a avaliação, o app só tenta novamente **após mais 3 dias**.
+- Se o usuário marcar **“Já avaliei”**, o status vira `rated_confirmed` e **nunca mais** exibe novamente.
+
+Configuração do package name (fallback da Play Store):
+
+- Ajuste em [reviewConfig.ts](file:///c:/Projetos/mensagem_transformadora/src/services/review/reviewConfig.ts)
 
 ## 🛠️ Tecnologias e Arquitetura
 

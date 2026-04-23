@@ -124,3 +124,10 @@ F12. Backup e restauração (Android)
 - O usuário deve conseguir **importar/restaurar** um backup selecionando um arquivo, substituindo os dados atuais do app.
 - A restauração deve exigir confirmação explícita (ação destrutiva).
 - O app deve manter um **histórico local** de exportações/importações para referência do usuário.
+
+F13. Avaliação na Play Store (Android)
+
+- O app deve exibir um **modal próprio** perguntando se o usuário está gostando do app antes de tentar solicitar avaliação.
+- A solicitação **não pode** acontecer antes de completar **3 dias** após o primeiro acesso do usuário ao app.
+- Após uma tentativa (ou adiamento), o app só pode tentar novamente **após mais 3 dias**.
+- Se o usuário marcar **“Já avaliei”**, o app deve considerar como confirmação rastreável e nunca mais solicitar.

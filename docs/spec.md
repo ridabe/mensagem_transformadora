@@ -160,11 +160,28 @@ Para exportar: escolhe uma pasta e o app salva um arquivo `.mtbackup`
 Para restaurar: seleciona um arquivo de backup e confirma a substituição dos dados
 Sistema reinicializa o banco local e reaplica migrations
 
+Fluxo 6 — Solicitar avaliação (Play Store, Android)
+Usuário entra na tela Início (ou conclui uma ação positiva, como exportar PDF)
+Sistema verifica regra de tempo (mínimo 3 dias desde o primeiro uso e mínimo 3 dias entre tentativas)
+Sistema exibe um modal próprio com “Avaliar agora”, “Lembrar depois” e “Já avaliei”
+Se “Avaliar agora”: tenta abrir o review nativo; se indisponível, abre a página do app na Play Store
+Como a Play Store não confirma a avaliação, o sistema marca como tentativa não confirmada e agenda nova elegibilidade para +3 dias
+Se “Lembrar depois”: agenda nova elegibilidade para +3 dias
+Se “Já avaliei”: marca como confirmado e nunca mais exibe
+
+Persistência local (AsyncStorage) — Avaliação
+
+- `first_open_at` (ms): primeiro uso do app
+- `next_review_at` (ms): próxima data/hora mínima para tentar exibir novamente
+- `review_status`: `never_asked` | `eligible` | `postponed` | `requested_but_unconfirmed` | `rated_confirmed`
+- `last_review_request_at` (ms | null): última tentativa de abrir avaliação
+- `review_request_count` (number): contador de tentativas
+- `rated_confirmed_at` (ms | null): quando o usuário confirmou “Já avaliei”
 
 
 
 
-5\. Modelo de dados local
+
 
 Tabela schema\_migrations
 

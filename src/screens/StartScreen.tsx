@@ -5,7 +5,8 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { AppButton, AppText, Card, IconButton, ScreenLayout, SermonCard } from '../components';
+import { AppButton, AppText, Card, IconButton, ReviewPromptModal, ScreenLayout, SermonCard } from '../components';
+import { useInAppReview } from '../hooks/useInAppReview';
 import type { HomeStackParamList } from '../navigation/RootNavigator';
 import { sermonNoteRepository } from '../repositories/sermonNoteRepository';
 import { theme } from '../theme/theme';
@@ -16,6 +17,7 @@ type Props = NativeStackScreenProps<HomeStackParamList, 'Home'>;
 export function StartScreen({ navigation }: Props) {
   const [items, setItems] = React.useState<SermonNote[]>([]);
   const [status, setStatus] = React.useState<'loading' | 'ready'>('loading');
+  const { requestPrompt, visible, isWorking, handleReviewNow, handleReviewLater, handleAlreadyReviewed } = useInAppReview();
 
   const load = React.useCallback(async () => {
     setStatus('loading');
@@ -31,8 +33,20 @@ export function StartScreen({ navigation }: Props) {
 
   useFocusEffect(
     React.useCallback(() => {
-      load();
-    }, [load])
+      let cancelled = false;
+
+      load().then(() => {
+        if (cancelled) return;
+        setTimeout(() => {
+          if (cancelled) return;
+          requestPrompt('home_focus').catch(() => {});
+        }, 900);
+      });
+
+      return () => {
+        cancelled = true;
+      };
+    }, [load, requestPrompt])
   );
 
   return (
@@ -162,6 +176,13 @@ export function StartScreen({ navigation }: Props) {
           onPress={() => navigation.navigate('NewMessage')}
         />
       </View>
+      <ReviewPromptModal
+        visible={visible}
+        isWorking={isWorking}
+        onReviewNow={() => handleReviewNow().catch(() => {})}
+        onReviewLater={() => handleReviewLater().catch(() => {})}
+        onAlreadyReviewed={() => handleAlreadyReviewed().catch(() => {})}
+      />
     </ScreenLayout>
   );
 }
