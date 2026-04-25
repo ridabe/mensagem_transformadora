@@ -60,7 +60,7 @@ export default function App() {
   return (
     <NavigationContainer theme={navigationTheme}>
       <StatusBar style={showPremiumSplash ? 'light' : 'auto'} />
-      <RootNavigator />
+      {ready ? <RootNavigator /> : null}
       <PremiumSplashOverlay
         visible={showPremiumSplash}
         durationMs={3000}

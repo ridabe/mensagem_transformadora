@@ -1,5 +1,5 @@
 import { getDb } from '../database/db';
-import type { SermonNote, SermonPoint } from '../types/sermon';
+import type { SermonNote, SermonPoint, WebPublishStatus } from '../types/sermon';
 
 type ListOptions = {
   searchText?: string;
@@ -26,6 +26,13 @@ type SermonNoteRow = {
   favorite: number;
   created_at: string;
   updated_at: string;
+  web_publication_id?: string | null;
+  web_slug?: string | null;
+  web_url?: string | null;
+  web_publish_status?: WebPublishStatus | null;
+  web_published_at?: string | null;
+  web_updated_at?: string | null;
+  web_last_error?: string | null;
 };
 
 type SermonPointRow = {
@@ -47,6 +54,8 @@ export const sermonNoteRepository = {
   getById,
   list,
   update,
+  setWebPublicationSuccess,
+  setWebPublicationError,
   remove,
   setFavorite,
   duplicate,
@@ -225,6 +234,12 @@ async function update(note: SermonNote): Promise<void> {
   const db = await getDb();
 
   await db.withExclusiveTransactionAsync(async (tx) => {
+    const shouldMarkUpdatedLocally = note.webPublishStatus === 'published';
+    const nextWebPublishStatus: WebPublishStatus = shouldMarkUpdatedLocally
+      ? 'updated_locally'
+      : (note.webPublishStatus ?? 'local_only');
+    const nextWebUpdatedAt = shouldMarkUpdatedLocally ? note.updatedAt : (note.webUpdatedAt ?? null);
+
     const updateParams = [
       note.userName,
       note.preacherName,
@@ -240,6 +255,9 @@ async function update(note: SermonNote): Promise<void> {
       note.finalSummary ?? null,
       safeStringify(note.highlightedPhrases ?? []),
       note.favorite ? 1 : 0,
+      nextWebPublishStatus,
+      nextWebUpdatedAt,
+      note.webLastError ?? null,
       note.updatedAt,
       note.id
     ] as const;
@@ -262,6 +280,9 @@ async function update(note: SermonNote): Promise<void> {
         final_summary = ?,
         highlighted_phrases = ?,
         favorite = ?,
+        web_publish_status = ?,
+        web_updated_at = ?,
+        web_last_error = ?,
         updated_at = ?
       WHERE id = ?;
       `,
@@ -293,6 +314,51 @@ async function update(note: SermonNote): Promise<void> {
   });
 }
 
+async function setWebPublicationSuccess(
+  sermonNoteId: string,
+  data: { id: string; slug: string; url: string },
+  nowIso: string
+): Promise<void> {
+  const db = await getDb();
+  await db.runAsync(
+    `
+    UPDATE sermon_notes
+    SET
+      web_publication_id = ?,
+      web_slug = ?,
+      web_url = ?,
+      web_publish_status = 'published',
+      web_published_at = ?,
+      web_updated_at = ?,
+      web_last_error = NULL
+    WHERE id = ?;
+    `,
+    data.id,
+    data.slug,
+    data.url,
+    nowIso,
+    nowIso,
+    sermonNoteId
+  );
+}
+
+async function setWebPublicationError(sermonNoteId: string, errorMessage: string, nowIso: string): Promise<void> {
+  const db = await getDb();
+  await db.runAsync(
+    `
+    UPDATE sermon_notes
+    SET
+      web_publish_status = 'publish_error',
+      web_last_error = ?,
+      web_updated_at = ?
+    WHERE id = ?;
+    `,
+    errorMessage,
+    nowIso,
+    sermonNoteId
+  );
+}
+
 async function remove(id: string): Promise<void> {
   const db = await getDb();
   await db.runAsync('DELETE FROM sermon_notes WHERE id = ?;', id);
@@ -317,6 +383,13 @@ async function duplicate(id: string): Promise<string> {
     id: newId,
     sermonTitle: `${original.sermonTitle} (Cópia)`,
     favorite: false,
+    webPublicationId: undefined,
+    webSlug: undefined,
+    webUrl: undefined,
+    webPublishStatus: 'local_only',
+    webPublishedAt: undefined,
+    webUpdatedAt: undefined,
+    webLastError: undefined,
     createdAt: now,
     updatedAt: now,
     keyPoints: (original.keyPoints ?? []).map((p, index) => ({ ...p, id: createId(), order: index + 1 }))
@@ -430,7 +503,14 @@ function mapNote(note: SermonNoteRow, points: SermonPointRow[], verses: Secondar
     finalSummary: note.final_summary ?? undefined,
     createdAt: note.created_at,
     updatedAt: note.updated_at,
-    favorite: note.favorite === 1
+    favorite: note.favorite === 1,
+    webPublicationId: note.web_publication_id ?? undefined,
+    webSlug: note.web_slug ?? undefined,
+    webUrl: note.web_url ?? undefined,
+    webPublishStatus: (note.web_publish_status ?? 'local_only') as WebPublishStatus,
+    webPublishedAt: note.web_published_at ?? undefined,
+    webUpdatedAt: note.web_updated_at ?? undefined,
+    webLastError: note.web_last_error ?? undefined
   };
 }
 

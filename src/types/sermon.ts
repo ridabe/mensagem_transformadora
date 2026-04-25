@@ -5,6 +5,8 @@ export type SermonPoint = {
   order: number;
 };
 
+export type WebPublishStatus = 'local_only' | 'published' | 'updated_locally' | 'publish_error' | 'unpublished';
+
 export type SermonNote = {
   id: string;
   userName: string;
@@ -25,4 +27,11 @@ export type SermonNote = {
   createdAt: string;
   updatedAt: string;
   favorite: boolean;
+  webPublicationId?: string;
+  webSlug?: string;
+  webUrl?: string;
+  webPublishStatus?: WebPublishStatus;
+  webPublishedAt?: string;
+  webUpdatedAt?: string;
+  webLastError?: string;
 };

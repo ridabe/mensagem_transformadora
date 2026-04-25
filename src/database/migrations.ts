@@ -82,6 +82,32 @@ const migrations: Migration[] = [
       CREATE INDEX IF NOT EXISTS idx_backup_history_created_at ON backup_history(created_at);
       `
     ]
+  },
+  {
+    version: 3,
+    up: [
+      `
+      ALTER TABLE sermon_notes ADD COLUMN web_publication_id TEXT;
+      `,
+      `
+      ALTER TABLE sermon_notes ADD COLUMN web_slug TEXT;
+      `,
+      `
+      ALTER TABLE sermon_notes ADD COLUMN web_url TEXT;
+      `,
+      `
+      ALTER TABLE sermon_notes ADD COLUMN web_publish_status TEXT NOT NULL DEFAULT 'local_only';
+      `,
+      `
+      ALTER TABLE sermon_notes ADD COLUMN web_published_at TEXT;
+      `,
+      `
+      ALTER TABLE sermon_notes ADD COLUMN web_updated_at TEXT;
+      `,
+      `
+      ALTER TABLE sermon_notes ADD COLUMN web_last_error TEXT;
+      `
+    ]
   }
 ];
 
