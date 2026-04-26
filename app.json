@@ -10,7 +10,7 @@
     ],
     "android": {
       "package": "com.algoritmum.msgt",
-      "versionCode": 2,
+      "versionCode": 3,
       "adaptiveIcon": {
         "foregroundImage": "./img/adaptive-icon.png",
         "backgroundColor": "#071A3A"

@@ -1,13 +1,15 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
+import { Alert, Linking, Share, StyleSheet, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import * as Clipboard from 'expo-clipboard';
 
 import { AppButton, Card, IconButton, ReviewPromptModal, ScreenLayout } from '../components';
 import { useInAppReview } from '../hooks/useInAppReview';
 import type { HomeStackParamList } from '../navigation/RootNavigator';
 import { sermonNoteRepository } from '../repositories/sermonNoteRepository';
 import { shareSermonNoteAsPdf } from '../services/pdf';
+import { getPublishErrorMessage, PublishError, publishSermonToWeb } from '../services/webPublicationService';
 import { theme } from '../theme/theme';
 import { AppText } from '../components/AppText';
 import type { SermonNote } from '../types/sermon';
@@ -49,6 +51,17 @@ export function MessageDetailsScreen({ navigation, route }: Props) {
     };
   }, [id]);
 
+  async function reloadNote() {
+    const result = await sermonNoteRepository.getById(id);
+    if (!result) {
+      setNote(null);
+      setStatus('not_found');
+      return;
+    }
+    setNote(result);
+    setStatus('ready');
+  }
+
   async function handleToggleFavorite() {
     if (!note || isWorking) return;
     const updatedAt = new Date().toISOString();
@@ -86,6 +99,79 @@ export function MessageDetailsScreen({ navigation, route }: Props) {
     } finally {
       setIsWorking(false);
     }
+  }
+
+  function handleRequestPublish() {
+    if (!note || isWorking) return;
+    Alert.alert(
+      'Publicar mensagem no site?',
+      'Sua mensagem será enviada para a plataforma web e poderá ser acessada por link. Nada é publicado automaticamente sem sua confirmação.',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        { text: 'Publicar', onPress: () => handlePublishNow().catch(() => {}) }
+      ]
+    );
+  }
+
+  async function handlePublishNow() {
+    if (!note || isWorking) return;
+    const nowIso = new Date().toISOString();
+
+    try {
+      setIsWorking(true);
+      const res = await publishSermonToWeb(note);
+      await sermonNoteRepository.setWebPublicationSuccess(note.id, res, nowIso);
+      await reloadNote();
+
+      Alert.alert('Publicado no site', 'Sua mensagem foi publicada com sucesso.', [
+        {
+          text: 'Copiar link',
+          onPress: () => {
+            if (res.url) {
+              Clipboard.setStringAsync(res.url).catch(() => {});
+              Alert.alert('Link copiado', 'O link foi copiado para a área de transferência.');
+            }
+          }
+        },
+        {
+          text: 'Compartilhar',
+          onPress: () => {
+            if (res.url) {
+              Share.share({ message: res.url }).catch(() => {});
+            }
+          }
+        },
+        { text: 'OK' }
+      ]);
+    } catch (e) {
+      if (e instanceof PublishError && e.kind === 'missing_required_fields') {
+        Alert.alert('Campos obrigatórios', e.message);
+        return;
+      }
+
+      const message = getPublishErrorMessage(e);
+      await sermonNoteRepository.setWebPublicationError(note.id, message, nowIso);
+      await reloadNote();
+      Alert.alert('Não foi possível publicar', message);
+    } finally {
+      setIsWorking(false);
+    }
+  }
+
+  async function handleCopyWebLink() {
+    if (!note?.webUrl) return;
+    await Clipboard.setStringAsync(note.webUrl);
+    Alert.alert('Link copiado', 'O link foi copiado para a área de transferência.');
+  }
+
+  async function handleShareWebLink() {
+    if (!note?.webUrl) return;
+    await Share.share({ message: note.webUrl });
+  }
+
+  async function handleOpenWebLink() {
+    if (!note?.webUrl) return;
+    await Linking.openURL(note.webUrl);
   }
   function handleDelete() {
     if (!note || isWorking) return;
@@ -204,6 +290,97 @@ export function MessageDetailsScreen({ navigation, route }: Props) {
               ID: {note.id}
             </AppText>
           </LinearGradient>
+
+          <View style={styles.section}>
+            <Card>
+              <AppText variant="subtitle">Publicação no site</AppText>
+
+              {(note.webPublishStatus ?? 'local_only') === 'published' ? (
+                <View style={styles.publishBlock}>
+                  <AppText color={theme.colors.mutedText} style={styles.paragraph}>
+                    Publicado no site.
+                  </AppText>
+                  {note.webUrl ? (
+                    <AppText color={theme.colors.primary} style={styles.paragraph} numberOfLines={2}>
+                      {note.webUrl}
+                    </AppText>
+                  ) : null}
+                  <View style={styles.publishActions}>
+                    <AppButton
+                      label="Copiar link"
+                      variant="secondary"
+                      iconName="content-copy"
+                      onPress={() => handleCopyWebLink().catch(() => {})}
+                      disabled={isWorking || !note.webUrl}
+                    />
+                    <View style={styles.actionSpacer} />
+                    <AppButton
+                      label="Compartilhar"
+                      variant="ghost"
+                      iconName="share"
+                      onPress={() => handleShareWebLink().catch(() => {})}
+                      disabled={isWorking || !note.webUrl}
+                    />
+                    <View style={styles.actionSpacer} />
+                    <AppButton
+                      label="Abrir no navegador"
+                      variant="ghost"
+                      iconName="open-in-browser"
+                      onPress={() => handleOpenWebLink().catch(() => {})}
+                      disabled={isWorking || !note.webUrl}
+                    />
+                  </View>
+                </View>
+              ) : (note.webPublishStatus ?? 'local_only') === 'publish_error' ? (
+                <View style={styles.publishBlock}>
+                  <AppText color={theme.colors.danger} style={styles.paragraph}>
+                    Falha na publicação.
+                  </AppText>
+                  {note.webLastError ? (
+                    <AppText color={theme.colors.mutedText} style={styles.paragraph}>
+                      {note.webLastError}
+                    </AppText>
+                  ) : null}
+                  <View style={styles.publishActions}>
+                    <AppButton
+                      label={isWorking ? 'Aguarde…' : 'Tentar novamente'}
+                      iconName="cloud-upload"
+                      onPress={handleRequestPublish}
+                      disabled={isWorking}
+                    />
+                  </View>
+                </View>
+              ) : (note.webPublishStatus ?? 'local_only') === 'updated_locally' ? (
+                <View style={styles.publishBlock}>
+                  <AppText color={theme.colors.mutedText} style={styles.paragraph}>
+                    Esta mensagem foi alterada após a publicação. Publique novamente para atualizar no site.
+                  </AppText>
+                  <View style={styles.publishActions}>
+                    <AppButton
+                      label={isWorking ? 'Aguarde…' : 'Publicar novamente'}
+                      iconName="cloud-upload"
+                      onPress={handleRequestPublish}
+                      disabled={isWorking}
+                    />
+                  </View>
+                </View>
+              ) : (
+                <View style={styles.publishBlock}>
+                  <AppText color={theme.colors.mutedText} style={styles.paragraph}>
+                    Envie esta mensagem para a plataforma web para gerar um link compartilhável.
+                  </AppText>
+                  <View style={styles.publishActions}>
+                    <AppButton
+                      label={isWorking ? 'Aguarde…' : 'Publicar no site'}
+                      iconName="cloud-upload"
+                      onPress={handleRequestPublish}
+                      disabled={isWorking}
+                    />
+                  </View>
+                </View>
+              )}
+            </Card>
+          </View>
 
           <View style={styles.section}>
             <Card>
@@ -340,6 +517,9 @@ const styles = StyleSheet.create({
   point: { paddingVertical: theme.spacing.sm, borderTopWidth: 1, borderTopColor: theme.colors.border },
   block: { marginTop: theme.spacing.md },
   actions: { marginTop: theme.spacing.md },
+  actionSpacer: { height: theme.spacing.sm },
+  publishActions: { marginTop: theme.spacing.md },
+  publishBlock: { marginTop: theme.spacing.sm },
   headerActions: { flexDirection: 'row', alignItems: 'center' },
   headerSpacer: { width: 4 },
   hero: {
