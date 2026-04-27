@@ -62,6 +62,8 @@ export function SermonNoteForm({
   const [conclusion, setConclusion] = React.useState(initialValues.conclusion);
   const [finalSummary, setFinalSummary] = React.useState(initialValues.finalSummary);
 
+  const shouldMoveSecondaryAddAction = secondaryVerses.length > 1;
+
   async function handleSubmit() {
     if (isSubmitting) return;
 
@@ -185,15 +187,17 @@ export function SermonNoteForm({
             <AppText variant="caption" style={styles.label}>
               Versículos secundários
             </AppText>
-            <Pressable
-              onPress={() => setSecondaryVerses((prev) => [...prev, ''])}
-              style={({ pressed }) => [styles.inlineAction, pressed ? styles.inlineActionPressed : null]}
-              disabled={isSubmitting}
-            >
-              <AppText variant="caption" style={styles.inlineActionText}>
-                + Adicionar
-              </AppText>
-            </Pressable>
+            {!shouldMoveSecondaryAddAction ? (
+              <Pressable
+                onPress={() => setSecondaryVerses((prev) => [...prev, ''])}
+                style={({ pressed }) => [styles.inlineAction, pressed ? styles.inlineActionPressed : null]}
+                disabled={isSubmitting}
+              >
+                <AppText variant="caption" style={styles.inlineActionText}>
+                  + Adicionar
+                </AppText>
+              </Pressable>
+            ) : null}
           </View>
 
           <View style={styles.dynamicStack}>
@@ -216,6 +220,20 @@ export function SermonNoteForm({
               </View>
             ))}
           </View>
+
+          {shouldMoveSecondaryAddAction ? (
+            <View style={styles.secondaryAddWrap}>
+              <Pressable
+                onPress={() => setSecondaryVerses((prev) => [...prev, ''])}
+                style={({ pressed }) => [styles.inlineAction, pressed ? styles.inlineActionPressed : null]}
+                disabled={isSubmitting}
+              >
+                <AppText variant="caption" style={styles.inlineActionText}>
+                  + Adicionar
+                </AppText>
+              </Pressable>
+            </View>
+          ) : null}
         </View>
       </Card>
 
@@ -402,6 +420,7 @@ const styles = StyleSheet.create({
   dynamicStack: { marginTop: theme.spacing.sm, gap: theme.spacing.sm },
   dynamicRow: { flexDirection: 'row', alignItems: 'center' },
   dynamicInput: { flex: 1, marginRight: theme.spacing.sm },
+  secondaryAddWrap: { marginTop: theme.spacing.sm, alignItems: 'flex-end' },
   pointBlock: {
     borderWidth: 1,
     borderColor: theme.colors.border,

@@ -1,5 +1,5 @@
 import React from 'react';
-import type { PressableProps } from 'react-native';
+import type { PressableProps, PressableStateCallbackType } from 'react-native';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
@@ -9,11 +9,14 @@ export type FabProps = PressableProps & {
   iconName?: React.ComponentProps<typeof MaterialIcons>['name'];
 };
 
-export function Fab({ iconName = 'add', style, ...props }: FabProps) {
+export function Fab({ iconName = 'add', style: outerStyle, ...props }: FabProps) {
   return (
     <Pressable
       {...props}
-      style={({ pressed }) => [styles.fab, pressed ? styles.fabPressed : null, style]}
+      style={(state: PressableStateCallbackType) => {
+        const resolvedStyle = typeof outerStyle === 'function' ? outerStyle(state) : outerStyle;
+        return [styles.fab, state.pressed ? styles.fabPressed : null, resolvedStyle];
+      }}
     >
       <View style={styles.iconWrap}>
         <MaterialIcons name={iconName} size={26} color="#FFFFFF" />

@@ -1,5 +1,5 @@
 import React from 'react';
-import type { PressableProps } from 'react-native';
+import type { PressableProps, PressableStateCallbackType } from 'react-native';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
@@ -12,7 +12,7 @@ export type AppButtonProps = PressableProps & {
   iconName?: React.ComponentProps<typeof MaterialIcons>['name'];
 };
 
-export function AppButton({ label, variant = 'primary', iconName, disabled, style, ...props }: AppButtonProps) {
+export function AppButton({ label, variant = 'primary', iconName, disabled, style: outerStyle, ...props }: AppButtonProps) {
   const styles = getStyles(variant);
   const iconColor = getIconColor(variant);
 
@@ -20,12 +20,16 @@ export function AppButton({ label, variant = 'primary', iconName, disabled, styl
     <Pressable
       {...props}
       disabled={disabled}
-      style={({ pressed }) => [
-        styles.button,
-        pressed && !disabled ? styles.buttonPressed : null,
-        disabled ? styles.buttonDisabled : null,
-        style
-      ]}
+      style={(state: PressableStateCallbackType) => {
+        const resolvedStyle = typeof outerStyle === 'function' ? outerStyle(state) : outerStyle;
+
+        return [
+          styles.button,
+          state.pressed && !disabled ? styles.buttonPressed : null,
+          disabled ? styles.buttonDisabled : null,
+          resolvedStyle
+        ];
+      }}
     >
       <View style={styles.content}>
         {iconName ? <MaterialIcons name={iconName} size={18} color={iconColor} style={styles.icon} /> : null}

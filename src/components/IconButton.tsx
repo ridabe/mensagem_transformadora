@@ -1,5 +1,5 @@
 import React from 'react';
-import type { PressableProps } from 'react-native';
+import type { PressableProps, PressableStateCallbackType } from 'react-native';
 import { Pressable, StyleSheet } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
@@ -11,12 +11,15 @@ export type IconButtonProps = PressableProps & {
   color?: string;
 };
 
-export function IconButton({ iconName, accessibilityLabel, color, style, ...props }: IconButtonProps) {
+export function IconButton({ iconName, accessibilityLabel, color, style: outerStyle, ...props }: IconButtonProps) {
   return (
     <Pressable
       {...props}
       accessibilityLabel={accessibilityLabel}
-      style={({ pressed }) => [styles.button, pressed ? styles.pressed : null, style]}
+      style={(state: PressableStateCallbackType) => {
+        const resolvedStyle = typeof outerStyle === 'function' ? outerStyle(state) : outerStyle;
+        return [styles.button, state.pressed ? styles.pressed : null, resolvedStyle];
+      }}
       hitSlop={10}
     >
       <MaterialIcons name={iconName} size={22} color={color ?? theme.colors.text} />
