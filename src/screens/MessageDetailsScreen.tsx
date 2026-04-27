@@ -16,6 +16,8 @@ import type { SermonNote } from '../types/sermon';
 
 type Props = NativeStackScreenProps<HomeStackParamList, 'Details'>;
 
+const WEB_PUBLISH_ENABLED = false;
+
 export function MessageDetailsScreen({ navigation, route }: Props) {
   const { id } = route.params;
   const [note, setNote] = React.useState<SermonNote | null>(null);
@@ -341,42 +343,60 @@ export function MessageDetailsScreen({ navigation, route }: Props) {
                       {note.webLastError}
                     </AppText>
                   ) : null}
-                  <View style={styles.publishActions}>
-                    <AppButton
-                      label={isWorking ? 'Aguarde…' : 'Tentar novamente'}
-                      iconName="cloud-upload"
-                      onPress={handleRequestPublish}
-                      disabled={isWorking}
-                    />
-                  </View>
+                  {WEB_PUBLISH_ENABLED ? (
+                    <View style={styles.publishActions}>
+                      <AppButton
+                        label={isWorking ? 'Aguarde…' : 'Tentar novamente'}
+                        iconName="cloud-upload"
+                        onPress={handleRequestPublish}
+                        disabled={isWorking}
+                      />
+                    </View>
+                  ) : (
+                    <AppText color={theme.colors.mutedText} style={styles.paragraph}>
+                      A publicação no site está desativada nesta versão do app.
+                    </AppText>
+                  )}
                 </View>
               ) : (note.webPublishStatus ?? 'local_only') === 'updated_locally' ? (
                 <View style={styles.publishBlock}>
                   <AppText color={theme.colors.mutedText} style={styles.paragraph}>
                     Esta mensagem foi alterada após a publicação. Publique novamente para atualizar no site.
                   </AppText>
-                  <View style={styles.publishActions}>
-                    <AppButton
-                      label={isWorking ? 'Aguarde…' : 'Publicar novamente'}
-                      iconName="cloud-upload"
-                      onPress={handleRequestPublish}
-                      disabled={isWorking}
-                    />
-                  </View>
+                  {WEB_PUBLISH_ENABLED ? (
+                    <View style={styles.publishActions}>
+                      <AppButton
+                        label={isWorking ? 'Aguarde…' : 'Publicar novamente'}
+                        iconName="cloud-upload"
+                        onPress={handleRequestPublish}
+                        disabled={isWorking}
+                      />
+                    </View>
+                  ) : (
+                    <AppText color={theme.colors.mutedText} style={styles.paragraph}>
+                      A publicação no site está desativada nesta versão do app.
+                    </AppText>
+                  )}
                 </View>
               ) : (
                 <View style={styles.publishBlock}>
                   <AppText color={theme.colors.mutedText} style={styles.paragraph}>
                     Envie esta mensagem para a plataforma web para gerar um link compartilhável.
                   </AppText>
-                  <View style={styles.publishActions}>
-                    <AppButton
-                      label={isWorking ? 'Aguarde…' : 'Publicar no site'}
-                      iconName="cloud-upload"
-                      onPress={handleRequestPublish}
-                      disabled={isWorking}
-                    />
-                  </View>
+                  {WEB_PUBLISH_ENABLED ? (
+                    <View style={styles.publishActions}>
+                      <AppButton
+                        label={isWorking ? 'Aguarde…' : 'Publicar no site'}
+                        iconName="cloud-upload"
+                        onPress={handleRequestPublish}
+                        disabled={isWorking}
+                      />
+                    </View>
+                  ) : (
+                    <AppText color={theme.colors.mutedText} style={styles.paragraph}>
+                      A publicação no site está desativada nesta versão do app.
+                    </AppText>
+                  )}
                 </View>
               )}
             </Card>
