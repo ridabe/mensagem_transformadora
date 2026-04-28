@@ -8,3 +8,4 @@ export { ScreenLayout } from './ScreenLayout';
 export { SermonNoteForm } from './SermonNoteForm';
 export { SermonCard } from './SermonCard';
 export { ReviewPromptModal } from './ReviewPromptModal';
+export { DonationModal } from './DonationModal';
