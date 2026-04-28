@@ -2,7 +2,7 @@
   "expo": {
     "name": "Mensagem Transformadora",
     "slug": "mensagem-transformadora",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "icon": "./img/icon.png",
     "orientation": "portrait",
     "platforms": [
@@ -10,7 +10,7 @@
     ],
     "android": {
       "package": "com.algoritmum.msgt",
-      "versionCode": 4,
+      "versionCode": 5,
       "adaptiveIcon": {
         "foregroundImage": "./img/adaptive-icon.png",
         "backgroundColor": "#071A3A"
