@@ -59,21 +59,21 @@ export function StartScreen({ navigation }: Props) {
         <IconButton 
           iconName="info-outline" 
           accessibilityLabel="Sobre o aplicativo" 
-           color="#FFFFFF" 
-           variant="brand"
+          color={theme.colors.onBrand}
+          variant="brand"
           onPress={() => navigation.navigate('About')} 
         />
       }
     >
       <View style={styles.hero}>
         <LinearGradient
-          colors={['#071A3A', '#0B2E6F', '#0D47A1'] as const}
+          colors={[theme.colors.brand, theme.colors.brandSoft, theme.colors.primary] as const}
           start={{ x: 0.05, y: 0.05 }}
           end={{ x: 0.95, y: 0.95 }}
           style={styles.heroGradient}
         >
           <LinearGradient
-            colors={['#D7B15A33', '#D7B15A00', '#D7B15A00'] as const}
+            colors={[theme.colors.goldOverlay, '#D7B15A00', '#D7B15A00'] as const}
             start={{ x: 0.9, y: 0.1 }}
             end={{ x: 0.2, y: 0.9 }}
             style={styles.heroGold}
@@ -82,7 +82,7 @@ export function StartScreen({ navigation }: Props) {
 
           <View style={styles.heroTop}>
             <View style={styles.heroBadge}>
-              <MaterialIcons name="offline-bolt" size={18} color="#FFFFFF" />
+              <MaterialIcons name="offline-bolt" size={18} color={theme.colors.onBrand} />
               <AppText variant="caption" style={styles.heroBadgeText}>
                 Offline • Local • Rápido
               </AppText>
@@ -92,7 +92,7 @@ export function StartScreen({ navigation }: Props) {
           <AppText variant="display" style={styles.heroTitle}>
             Capture sua pregação.
           </AppText>
-          <AppText style={styles.heroSubtitle} color="#EAF2FF">
+          <AppText style={styles.heroSubtitle} color={theme.colors.onBrandSoft}>
             Um espaço premium para anotar, organizar e revisitar mensagens — sem depender de internet.
           </AppText>
 
@@ -199,19 +199,19 @@ const styles = StyleSheet.create({
     width: 220,
     height: 220,
     borderRadius: 110,
-    backgroundColor: '#FFFFFF12'
+    backgroundColor: theme.colors.onBrandOverlay
   },
   heroTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   heroBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF1F',
+    backgroundColor: theme.colors.surfaceOverlay,
     borderRadius: theme.radius.pill,
     paddingHorizontal: theme.spacing.md,
     paddingVertical: theme.spacing.sm
   },
-  heroBadgeText: { color: '#FFFFFF', marginLeft: theme.spacing.sm },
-  heroTitle: { color: '#FFFFFF', marginTop: theme.spacing.lg },
+  heroBadgeText: { color: theme.colors.onBrand, marginLeft: theme.spacing.sm },
+  heroTitle: { color: theme.colors.onBrand, marginTop: theme.spacing.lg },
   heroSubtitle: { marginTop: theme.spacing.sm, lineHeight: 21 },
   heroActions: { marginTop: theme.spacing.xl },
   heroSpacer: { height: theme.spacing.sm },
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   link: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 8, paddingVertical: 6, borderRadius: theme.radius.pill },
-  linkPressed: { backgroundColor: '#00000008' },
+  linkPressed: { backgroundColor: theme.colors.surfacePressed },
   linkText: { color: theme.colors.primary, marginRight: 2 },
   cards: { gap: theme.spacing.md },
   paragraph: { marginTop: theme.spacing.sm },

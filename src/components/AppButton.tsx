@@ -69,7 +69,7 @@ function getStyles(variant: NonNullable<AppButtonProps['variant']>) {
     return StyleSheet.create({
       ...base,
       button: { ...base.button, backgroundColor: 'transparent', borderColor: theme.colors.border },
-      buttonPressed: { backgroundColor: '#00000008' },
+      buttonPressed: { backgroundColor: theme.colors.surfacePressed },
       label: { color: theme.colors.text }
     });
   }
@@ -77,17 +77,17 @@ function getStyles(variant: NonNullable<AppButtonProps['variant']>) {
   if (variant === 'outlineLight') {
     return StyleSheet.create({
       ...base,
-      button: { ...base.button, backgroundColor: 'transparent', borderColor: '#FFFFFFB3' },
-      buttonPressed: { backgroundColor: '#FFFFFF1A', borderColor: '#FFFFFFCC' },
-      label: { color: '#FFFFFF' }
+      button: { ...base.button, backgroundColor: 'transparent', borderColor: theme.colors.surfaceOverlayStrong },
+      buttonPressed: { backgroundColor: theme.colors.surfaceOverlay, borderColor: theme.colors.surfaceOverlayStrong },
+      label: { color: theme.colors.onBrand }
     });
   }
 
   if (variant === 'light') {
     return StyleSheet.create({
       ...base,
-      button: { ...base.button, backgroundColor: '#FFFFFF', borderColor: '#FFFFFF' },
-      buttonPressed: { backgroundColor: '#FFFFFFE6', borderColor: '#FFFFFFE6' },
+      button: { ...base.button, backgroundColor: theme.colors.surface, borderColor: theme.colors.surface },
+      buttonPressed: { backgroundColor: theme.colors.backgroundAlt, borderColor: theme.colors.backgroundAlt },
       label: { color: theme.colors.primary }
     });
   }
@@ -97,7 +97,7 @@ function getStyles(variant: NonNullable<AppButtonProps['variant']>) {
       ...base,
       button: { ...base.button, backgroundColor: theme.colors.danger, borderColor: theme.colors.danger },
       buttonPressed: { backgroundColor: theme.colors.dangerPressed, borderColor: theme.colors.dangerPressed },
-      label: { color: '#FFFFFF' }
+      label: { color: theme.colors.onBrand }
     });
   }
 
@@ -105,7 +105,7 @@ function getStyles(variant: NonNullable<AppButtonProps['variant']>) {
     return StyleSheet.create({
       ...base,
       button: { ...base.button, backgroundColor: theme.colors.primarySoft, borderColor: theme.colors.primarySoft },
-      buttonPressed: { backgroundColor: '#D7E7FF', borderColor: '#D7E7FF' },
+      buttonPressed: { backgroundColor: theme.colors.primaryExtraSoft, borderColor: theme.colors.primaryExtraSoft },
       label: { color: theme.colors.primary }
     });
   }
@@ -114,12 +114,12 @@ function getStyles(variant: NonNullable<AppButtonProps['variant']>) {
     ...base,
     button: { ...base.button, backgroundColor: theme.colors.primary, borderColor: theme.colors.primary },
     buttonPressed: { backgroundColor: theme.colors.primaryPressed, borderColor: theme.colors.primaryPressed },
-    label: { color: '#FFFFFF' }
+    label: { color: theme.colors.onBrand }
   });
 }
 
 function getIconColor(variant: NonNullable<AppButtonProps['variant']>) {
-  if (variant === 'primary' || variant === 'danger' || variant === 'outlineLight') return '#FFFFFF';
+  if (variant === 'primary' || variant === 'danger' || variant === 'outlineLight') return theme.colors.onBrand;
   if (variant === 'light' || variant === 'secondary') return theme.colors.primary;
   return theme.colors.text;
 }

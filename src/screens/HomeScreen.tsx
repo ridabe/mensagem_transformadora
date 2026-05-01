@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#00000012',
+    borderColor: theme.colors.border,
     backgroundColor: theme.colors.surface,
     borderRadius: theme.radius.xl,
     paddingHorizontal: theme.spacing.md,

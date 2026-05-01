@@ -58,10 +58,10 @@ const styles = StyleSheet.create({
   containerDefault: {
     backgroundColor: theme.colors.background,
     borderBottomWidth: 1,
-    borderBottomColor: '#0000000A'
+    borderBottomColor: theme.colors.border
   },
   containerBrand: {
-    backgroundColor: '#071A3A',
+    backgroundColor: theme.colors.brand,
     borderBottomWidth: 0,
     shadowColor: '#000',
     shadowOpacity: 0.12,
@@ -75,5 +75,5 @@ const styles = StyleSheet.create({
   logo: { width: 22, height: 22, marginRight: theme.spacing.sm },
   title: { flexShrink: 1 },
   titleDefault: { color: theme.colors.text },
-  titleBrand: { color: '#FFFFFF' }
+  titleBrand: { color: theme.colors.onBrand }
 });

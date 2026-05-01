@@ -71,7 +71,7 @@ export function ReviewPromptModal({
 const styles = StyleSheet.create({
   backdrop: {
     flex: 1,
-    backgroundColor: '#00000066',
+    backgroundColor: theme.colors.backdrop,
     padding: theme.spacing.xl,
     justifyContent: 'center'
   },

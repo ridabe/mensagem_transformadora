@@ -263,7 +263,7 @@ export function MessageDetailsScreen({ navigation, route }: Props) {
       ) : note ? (
         <View>
           <LinearGradient
-            colors={['#071A3A', '#0B2E6F', '#0D47A1'] as const}
+            colors={[theme.colors.brand, theme.colors.brandSoft, theme.colors.primary] as const}
             start={{ x: 0.05, y: 0.05 }}
             end={{ x: 0.95, y: 0.95 }}
             style={styles.hero}
@@ -275,20 +275,20 @@ export function MessageDetailsScreen({ navigation, route }: Props) {
             <AppText variant="title" style={styles.heroTitle}>
               {note.sermonTitle}
             </AppText>
-            <AppText style={styles.heroMeta} color="#EAF2FF">
+            <AppText style={styles.heroMeta} color={theme.colors.onBrandSoft}>
               {note.preacherName} • {note.churchName}
             </AppText>
-            <AppText style={styles.heroMeta} color="#EAF2FF">
+            <AppText style={styles.heroMeta} color={theme.colors.onBrandSoft}>
               {note.sermonDate}
               {note.sermonTime ? ` • ${note.sermonTime}` : ''}
             </AppText>
-            <AppText style={styles.heroVerse} color="#FFFFFF">
-              <AppText variant="caption" color="#EAF2FF">
+            <AppText style={styles.heroVerse} color={theme.colors.onBrand}>
+              <AppText variant="caption" color={theme.colors.onBrandSoft}>
                 Versículo base:{' '}
               </AppText>
               {note.mainVerse}
             </AppText>
-            <AppText variant="caption" style={styles.heroId} color="#FFFFFFB3">
+            <AppText variant="caption" style={styles.heroId} color={theme.colors.onBrandSoft}>
               ID: {note.id}
             </AppText>
           </LinearGradient>
@@ -555,10 +555,10 @@ const styles = StyleSheet.create({
     width: 240,
     height: 240,
     borderRadius: 120,
-    backgroundColor: '#FFFFFF10'
+    backgroundColor: theme.colors.onBrandOverlay
   },
-  heroKicker: { color: '#FFFFFFB3' },
-  heroTitle: { color: '#FFFFFF', marginTop: theme.spacing.sm },
+  heroKicker: { color: theme.colors.onBrandSoft },
+  heroTitle: { color: theme.colors.onBrand, marginTop: theme.spacing.sm },
   heroMeta: { marginTop: theme.spacing.sm },
   heroVerse: { marginTop: theme.spacing.md },
   heroId: { marginTop: theme.spacing.md }

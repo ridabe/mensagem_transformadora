@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  refreshPressed: { backgroundColor: '#00000008' },
+  refreshPressed: { backgroundColor: theme.colors.surfacePressed },
   metricsRow: { flexDirection: 'row' },
   metricsSpacer: { width: theme.spacing.md },
   spacer: { height: theme.spacing.md },
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.md,
     height: 10,
     borderRadius: theme.radius.pill,
-    backgroundColor: '#0B122014',
+    backgroundColor: theme.colors.surfacePressed,
     overflow: 'hidden'
   },
   progressFill: {
@@ -173,8 +173,8 @@ function MetricCard({
 }) {
   const colors =
     tone === 'primary'
-      ? (['#071A3A', '#0B2E6F', '#0D47A1'] as const)
-      : (['#0B1220', '#1D1230', '#7E57C2'] as const);
+      ? ([theme.colors.brand, theme.colors.brandSoft, theme.colors.primary] as const)
+      : ([theme.colors.surface, theme.colors.brand, theme.colors.accent] as const);
   const iconBg = theme.colors.gold;
 
   return (
@@ -187,7 +187,7 @@ function MetricCard({
       <View pointerEvents="none" style={metricStyles.orb} />
       <View style={metricStyles.header}>
         <View style={[metricStyles.iconWrap, { backgroundColor: iconBg }]}>
-          <MaterialIcons name={iconName} size={18} color="#FFFFFF" />
+          <MaterialIcons name={iconName} size={18} color={theme.colors.onBrand} />
         </View>
         <AppText variant="caption" style={metricStyles.kicker}>
           {title}
@@ -216,7 +216,7 @@ const metricStyles = StyleSheet.create({
     width: 190,
     height: 190,
     borderRadius: 95,
-    backgroundColor: '#FFFFFF14'
+    backgroundColor: theme.colors.surfaceOverlay
   },
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   iconWrap: {
@@ -226,9 +226,9 @@ const metricStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  kicker: { color: '#FFFFFFB3' },
-  value: { fontSize: 36, fontWeight: '800', marginTop: theme.spacing.md, color: '#FFFFFF' },
-  subtitle: { marginTop: theme.spacing.xs, color: '#FFFFFFB3' }
+  kicker: { color: theme.colors.onBrandSoft },
+  value: { fontSize: 36, fontWeight: '800', marginTop: theme.spacing.md, color: theme.colors.onBrand },
+  subtitle: { marginTop: theme.spacing.xs, color: theme.colors.onBrandSoft }
 });
 
 function MiniBarChart({ data }: { data: Array<{ day: string; count: number }> }) {

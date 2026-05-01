@@ -79,9 +79,9 @@ const styles = StyleSheet.create({
 
 function getPrimaryCardPalette(index: number): { bg: string; overlay: string } {
   const variants = [
-    { bg: theme.colors.primarySoft, overlay: '#0D47A11A' },
-    { bg: theme.colors.backgroundAlt, overlay: '#0D47A114' },
-    { bg: '#DCE7FF', overlay: '#0D47A117' }
+    { bg: theme.colors.primarySoft, overlay: theme.colors.primaryOverlay },
+    { bg: theme.colors.backgroundAlt, overlay: theme.colors.primaryOverlaySoft },
+    { bg: theme.colors.primaryExtraSoft, overlay: theme.colors.primaryOverlay }
   ];
   return variants[index % variants.length];
 }
