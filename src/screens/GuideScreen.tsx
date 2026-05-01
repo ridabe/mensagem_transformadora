@@ -10,7 +10,7 @@ export function GuideScreen() {
   return (
     <ScreenLayout title="Guia" scroll contentStyle={styles.content}>
       <LinearGradient
-        colors={['#071A3A', '#0B2E6F', '#0D47A1'] as const}
+        colors={[theme.colors.brand, theme.colors.brandSoft, theme.colors.primary] as const}
         start={{ x: 0.05, y: 0.05 }}
         end={{ x: 0.95, y: 0.95 }}
         style={styles.hero}
@@ -19,13 +19,13 @@ export function GuideScreen() {
         <View pointerEvents="none" style={styles.heroOrb} />
         <View style={styles.heroRow}>
           <View style={styles.heroIcon}>
-            <MaterialIcons name="menu-book" size={22} color="#071A3A" />
+            <MaterialIcons name="menu-book" size={22} color={theme.colors.onBrand} />
           </View>
           <View style={styles.heroText}>
             <AppText variant="title" style={styles.heroTitle}>
               Como usar o app
             </AppText>
-            <AppText color="#EAF2FF" style={styles.heroSubtitle}>
+            <AppText color={theme.colors.onBrandSoft} style={styles.heroSubtitle}>
               Instruções rápidas por tela, com pontos importantes destacados.
             </AppText>
           </View>
@@ -139,7 +139,7 @@ function GuideSection({
     <Card style={styles.card}>
       <View style={styles.cardHeader}>
         <View style={[styles.cardIcon, { backgroundColor: color }]}>
-          <MaterialIcons name={iconName} size={18} color="#FFFFFF" />
+          <MaterialIcons name={iconName} size={18} color={theme.colors.onBrand} />
         </View>
         <AppText variant="subtitle" style={styles.cardTitle}>
           {title}
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
     width: 260,
     height: 260,
     borderRadius: 130,
-    backgroundColor: '#D7B15A22'
+    backgroundColor: theme.colors.goldOverlay
   },
   heroOrb: {
     position: 'absolute',
@@ -216,19 +216,19 @@ const styles = StyleSheet.create({
     width: 240,
     height: 240,
     borderRadius: 120,
-    backgroundColor: '#FFFFFF10'
+    backgroundColor: theme.colors.onBrandOverlay
   },
   heroIcon: {
     width: 44,
     height: 44,
     borderRadius: theme.radius.md,
-    backgroundColor: '#D7B15A',
+    backgroundColor: theme.colors.gold,
     alignItems: 'center',
     justifyContent: 'center'
   },
   heroText: { flex: 1, paddingLeft: theme.spacing.md },
-  heroTitle: { color: '#FFFFFF' },
-  heroSubtitle: { marginTop: theme.spacing.sm },
+  heroTitle: { color: theme.colors.onBrand },
+  heroSubtitle: { marginTop: theme.spacing.sm, color: theme.colors.onBrandSoft },
   noticeRow: { flexDirection: 'row', marginTop: theme.spacing.md },
   noticeSpacer: { width: theme.spacing.sm },
   pill: {

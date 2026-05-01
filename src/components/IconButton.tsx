@@ -42,10 +42,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   buttonBrand: {
-    backgroundColor: '#FFFFFF14',
+    backgroundColor: theme.colors.surfaceOverlay,
     borderWidth: 1,
-    borderColor: '#FFFFFF26'
+    borderColor: theme.colors.surfaceOverlayStrong
   },
-  pressed: { backgroundColor: '#00000008' },
-  pressedBrand: { backgroundColor: '#FFFFFF22', borderColor: '#FFFFFF40' }
+  pressed: { backgroundColor: theme.colors.surfacePressed },
+  pressedBrand: { backgroundColor: theme.colors.surfaceOverlayStrong, borderColor: theme.colors.surfaceOverlayStrong }
 });

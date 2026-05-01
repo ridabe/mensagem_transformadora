@@ -81,7 +81,7 @@ export function BackupScreen({ navigation }: Props) {
   return (
     <ScreenLayout title="Backup" scroll contentStyle={styles.content}>
       <LinearGradient
-        colors={['#071A3A', '#0B2E6F', '#0D47A1'] as const}
+        colors={[theme.colors.brand, theme.colors.brandSoft, theme.colors.primary] as const}
         start={{ x: 0.05, y: 0.05 }}
         end={{ x: 0.95, y: 0.95 }}
         style={styles.hero}
@@ -90,13 +90,13 @@ export function BackupScreen({ navigation }: Props) {
         <View pointerEvents="none" style={styles.heroOrb} />
         <View style={styles.heroHeader}>
           <View style={styles.heroIcon}>
-            <MaterialIcons name="cloud-upload" size={22} color="#FFFFFF" />
+            <MaterialIcons name="cloud-upload" size={22} color={theme.colors.onBrand} />
           </View>
           <AppText variant="title" style={styles.heroTitle}>
             Backup e Restauração
           </AppText>
         </View>
-        <AppText style={styles.heroSubtitle} color="#FFFFFFB3">
+        <AppText style={styles.heroSubtitle} color={theme.colors.onBrandSoft}>
           Exporte seus dados para um arquivo e restaure quando precisar reinstalar o app.
         </AppText>
       </LinearGradient>
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
     width: 300,
     height: 300,
     borderRadius: 150,
-    backgroundColor: '#D7B15A22'
+    backgroundColor: theme.colors.goldOverlay
   },
   heroOrb: {
     position: 'absolute',
@@ -221,22 +221,22 @@ const styles = StyleSheet.create({
     width: 240,
     height: 240,
     borderRadius: 120,
-    backgroundColor: '#FFFFFF10'
+    backgroundColor: theme.colors.onBrandOverlay
   },
   heroHeader: { flexDirection: 'row', alignItems: 'center' },
   heroIcon: {
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: '#FFFFFF14',
+    backgroundColor: theme.colors.surfaceOverlay,
     borderWidth: 1,
-    borderColor: '#FFFFFF22',
+    borderColor: theme.colors.surfaceOverlayStrong,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: theme.spacing.md
   },
-  heroTitle: { color: '#FFFFFF' },
-  heroSubtitle: { marginTop: theme.spacing.sm, lineHeight: 21 },
+  heroTitle: { color: theme.colors.onBrand },
+  heroSubtitle: { marginTop: theme.spacing.sm, lineHeight: 21, color: theme.colors.onBrandSoft },
   card: { marginBottom: theme.spacing.xl },
   actions: { marginTop: theme.spacing.md },
   actionSpacer: { height: theme.spacing.sm },

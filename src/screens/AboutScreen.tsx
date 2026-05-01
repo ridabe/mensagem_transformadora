@@ -13,7 +13,7 @@ export function AboutScreen({ navigation }: Props) {
   return (
     <ScreenLayout title="Sobre o Aplicativo" scroll contentStyle={styles.content}>
       <LinearGradient
-        colors={['#071A3A', '#0B2E6F', '#0D47A1'] as const}
+        colors={[theme.colors.brand, theme.colors.brandSoft, theme.colors.primary] as const}
         start={{ x: 0.05, y: 0.05 }}
         end={{ x: 0.95, y: 0.95 }}
         style={styles.hero}
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     width: 300,
     height: 300,
     borderRadius: 150,
-    backgroundColor: '#D7B15A22'
+    backgroundColor: theme.colors.goldOverlay
   },
   heroOrb: {
     position: 'absolute',
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     width: 240,
     height: 240,
     borderRadius: 120,
-    backgroundColor: '#FFFFFF10'
+    backgroundColor: theme.colors.onBrandOverlay
   },
   logoContainer: {
     alignItems: 'center',
@@ -122,8 +122,8 @@ const styles = StyleSheet.create({
     height: 112,
     borderRadius: 56,
     borderWidth: 1,
-    borderColor: '#FFFFFF22',
-    backgroundColor: '#FFFFFF0F',
+    borderColor: theme.colors.surfaceOverlayStrong,
+    backgroundColor: theme.colors.surfaceOverlay,
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -131,9 +131,9 @@ const styles = StyleSheet.create({
     width: 90,
     height: 90,
     borderRadius: 45,
-    backgroundColor: '#FFFFFF10',
+    backgroundColor: theme.colors.surfaceOverlay,
     borderWidth: 1,
-    borderColor: '#FFFFFF1A',
+    borderColor: theme.colors.surfaceOverlayStrong,
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -141,19 +141,19 @@ const styles = StyleSheet.create({
   title: {
     marginTop: theme.spacing.lg,
     textAlign: 'center',
-    color: '#FFFFFF'
+    color: theme.colors.onBrand
   },
   badge: {
     marginTop: theme.spacing.md,
-    backgroundColor: '#FFFFFF14',
+    backgroundColor: theme.colors.surfaceOverlay,
     paddingHorizontal: theme.spacing.md,
     paddingVertical: theme.spacing.xs,
     borderRadius: theme.radius.pill,
     borderWidth: 1,
-    borderColor: '#FFFFFF26'
+    borderColor: theme.colors.surfaceOverlayStrong
   },
   badgeText: {
-    color: '#FFFFFF',
+    color: theme.colors.onBrand,
     fontWeight: '700'
   },
   card: {

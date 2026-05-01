@@ -77,13 +77,13 @@ export function PremiumSplashOverlay({
   return (
     <View style={styles.wrap} pointerEvents="auto">
       <LinearGradient
-        colors={['#071A3A', '#0B2E6F', '#0D47A1'] as const}
+        colors={[theme.colors.brand, theme.colors.brandSoft, theme.colors.primary] as const}
         start={{ x: 0.1, y: 0.05 }}
         end={{ x: 0.9, y: 0.95 }}
         style={StyleSheet.absoluteFill}
       />
       <LinearGradient
-        colors={['#D7B15A33', '#D7B15A00', '#D7B15A00'] as const}
+        colors={[theme.colors.goldOverlay, '#D7B15A00', '#D7B15A00'] as const}
         start={{ x: 0.95, y: 0.1 }}
         end={{ x: 0.15, y: 0.8 }}
         style={StyleSheet.absoluteFill}
@@ -141,8 +141,8 @@ const styles = StyleSheet.create({
     height: 118,
     borderRadius: 59,
     borderWidth: 1,
-    borderColor: '#FFFFFF22',
-    backgroundColor: '#FFFFFF0F',
+    borderColor: theme.colors.surfaceOverlayStrong,
+    backgroundColor: theme.colors.surfaceOverlay,
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -150,23 +150,23 @@ const styles = StyleSheet.create({
     width: 92,
     height: 92,
     borderRadius: 46,
-    backgroundColor: '#FFFFFF10',
+    backgroundColor: theme.colors.surfaceOverlay,
     borderWidth: 1,
-    borderColor: '#FFFFFF1A',
+    borderColor: theme.colors.surfaceOverlayStrong,
     alignItems: 'center',
     justifyContent: 'center'
   },
   logo: { width: 54, height: 54 },
   wordmark: { marginTop: theme.spacing.lg, alignItems: 'center' },
-  kicker: { color: '#FFFFFFB3' },
-  title: { color: '#FFFFFF', textAlign: 'center' },
+  kicker: { color: theme.colors.onBrandSoft },
+  title: { color: theme.colors.onBrand, textAlign: 'center' },
   titleRow: { flexDirection: 'row', alignItems: 'center' },
-  titleAccent: { color: '#D7B15A' },
+  titleAccent: { color: theme.colors.gold },
   goldDot: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#D7B15A',
+    backgroundColor: theme.colors.gold,
     marginLeft: 8,
     marginTop: 6
   },
