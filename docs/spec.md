@@ -40,6 +40,7 @@ sermonTime?: string
 sermonTitle: string
 mainVerse: string
 secondaryVerses: string\[]
+preSermonCode?: string
 introduction?: string
 keyPoints: SermonPoint\[]
 highlightedPhrases: string\[]
@@ -131,10 +132,11 @@ A arquitetura deve permitir no futuro adicionar sincronização, contas e IA ext
 3.5 Fluxos principais
 Fluxo 1 — Criar anotação
 Usuário abre o app
-Clica em “Nova Mensagem”
-Preenche os campos
-Adiciona pontos principais
-Adiciona versículos secundários
+Clica em “Anotar Pregação”
+Escolhe entre “Criar do zero” ou “Carregar do código fornecido”
+Se escolher criar do zero, os campos iniciam vazios
+Se escolher carregar do código, o app solicita o código MT-XXXXX, chama a API e pré-preenche os campos iniciais
+O usuário revisa e pode editar os campos
 Salva
 Registro é persistido localmente
 Fluxo 2 — Editar anotação
@@ -159,6 +161,16 @@ Clica em “Backup e Restauração”
 Para exportar: escolhe uma pasta e o app salva um arquivo `.mtbackup`
 Para restaurar: seleciona um arquivo de backup e confirma a substituição dos dados
 Sistema reinicializa o banco local e reaplica migrations
+
+Fluxo 6 — Carregar pré-sermão por código
+Usuário abre o app
+Clica em “Anotar Pregação”
+Escolhe “Carregar do código fornecido”
+Digita o código MT-XXXXX
+App valida e normaliza o código
+App chama API pública para buscar dados do pré-sermão
+Campos principais são preenchidos automaticamente
+O usuário revisa, edita e salva localmente
 
 Fluxo 6 — Solicitar avaliação (Play Store, Android)
 Usuário entra na tela Início (ou conclui uma ação positiva, como exportar PDF)
@@ -206,11 +218,9 @@ CREATE TABLE sermon\_notes (
 &#x20; sermon\_date TEXT NOT NULL,
 
 &#x20; sermon\_time TEXT,
-
-&#x20; sermon\_title TEXT NOT NULL,
-
-&#x20; main\_verse TEXT NOT NULL,
-
+&#x20; sermon_title TEXT NOT NULL,
+&#x20; main_verse TEXT NOT NULL,
+&#x20; pre_sermon_code TEXT,
 &#x20; introduction TEXT,
 
 &#x20; personal\_observations TEXT,
