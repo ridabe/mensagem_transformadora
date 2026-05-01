@@ -171,9 +171,9 @@ export function StartScreen({ navigation }: Props) {
 
       <View style={styles.bottomCta}>
         <AppButton
-          label="Adicionar sermão"
+          label="Anotar Pregação"
           iconName="edit-note"
-          onPress={() => navigation.navigate('NewMessage')}
+          onPress={() => navigation.navigate('NewMessageChoice')}
         />
       </View>
       <ReviewPromptModal

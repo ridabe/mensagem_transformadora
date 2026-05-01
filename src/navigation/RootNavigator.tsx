@@ -9,6 +9,8 @@ import { HomeScreen } from '../screens/HomeScreen';
 import { GuideScreen } from '../screens/GuideScreen';
 import { MessageDetailsScreen } from '../screens/MessageDetailsScreen';
 import { NewMessageScreen } from '../screens/NewMessageScreen';
+import { NewMessageChoiceScreen } from '../screens/NewMessageChoiceScreen';
+import { PreSermonCodeScreen } from '../screens/PreSermonCodeScreen';
 import { StartScreen } from '../screens/StartScreen';
 import { AboutScreen } from '../screens/AboutScreen';
 import { BackupScreen } from '../screens/BackupScreen';
@@ -17,7 +19,16 @@ import { theme } from '../theme/theme';
 export type HomeStackParamList = {
   Home: undefined;
   History: undefined;
-  NewMessage: undefined;
+  NewMessageChoice: undefined;
+  PreSermonCode: undefined;
+  NewMessage: { preSermon?: {
+    shareCode: string;
+    title?: string;
+    mainVerse?: string;
+    secondaryVerses?: string[];
+    leader?: { name?: string };
+    church?: { name?: string };
+  } } | undefined;
   Details: { id: string };
   Edit: { id: string };
   About: undefined;
@@ -38,6 +49,8 @@ function HomeStackNavigator() {
     <HomeStack.Navigator screenOptions={{ headerShown: false, animation: 'fade' }}>
       <HomeStack.Screen name="Home" component={StartScreen} />
       <HomeStack.Screen name="History" component={HomeScreen} />
+      <HomeStack.Screen name="NewMessageChoice" component={NewMessageChoiceScreen} />
+      <HomeStack.Screen name="PreSermonCode" component={PreSermonCodeScreen} />
       <HomeStack.Screen name="NewMessage" component={NewMessageScreen} />
       <HomeStack.Screen name="Details" component={MessageDetailsScreen} />
       <HomeStack.Screen name="Edit" component={EditMessageScreen} />
