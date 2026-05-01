@@ -22,6 +22,7 @@ type SermonNoteRow = {
   practical_applications: string | null;
   conclusion: string | null;
   final_summary: string | null;
+  pre_sermon_code?: string | null;
   highlighted_phrases: string;
   favorite: number;
   created_at: string;
@@ -89,6 +90,7 @@ async function create(note: SermonNote): Promise<void> {
       note.practicalApplications ?? null,
       note.conclusion ?? null,
       note.finalSummary ?? null,
+      note.preSermonCode ?? null,
       safeStringify(note.highlightedPhrases ?? []),
       note.favorite ? 1 : 0,
       note.createdAt,
@@ -100,9 +102,9 @@ async function create(note: SermonNote): Promise<void> {
       INSERT INTO sermon_notes (
         id, user_name, preacher_name, church_name, sermon_date, sermon_time,
         sermon_title, main_verse, introduction, personal_observations,
-        practical_applications, conclusion, final_summary, highlighted_phrases,
-        favorite, created_at, updated_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+        practical_applications, conclusion, final_summary, pre_sermon_code,
+        highlighted_phrases, favorite, created_at, updated_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
       `,
       ...noteParams
     );
@@ -253,6 +255,7 @@ async function update(note: SermonNote): Promise<void> {
       note.practicalApplications ?? null,
       note.conclusion ?? null,
       note.finalSummary ?? null,
+      note.preSermonCode ?? null,
       safeStringify(note.highlightedPhrases ?? []),
       note.favorite ? 1 : 0,
       nextWebPublishStatus,
@@ -278,6 +281,7 @@ async function update(note: SermonNote): Promise<void> {
         practical_applications = ?,
         conclusion = ?,
         final_summary = ?,
+        pre_sermon_code = ?,
         highlighted_phrases = ?,
         favorite = ?,
         web_publish_status = ?,
@@ -494,6 +498,7 @@ function mapNote(note: SermonNoteRow, points: SermonPointRow[], verses: Secondar
     sermonTitle: note.sermon_title,
     mainVerse: note.main_verse,
     secondaryVerses: verses.map((v) => v.verse_text),
+    preSermonCode: note.pre_sermon_code ?? undefined,
     introduction: note.introduction ?? undefined,
     keyPoints: points.map(mapPoint),
     highlightedPhrases: safeParseStringArray(note.highlighted_phrases),

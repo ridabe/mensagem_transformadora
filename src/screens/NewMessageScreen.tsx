@@ -10,20 +10,21 @@ import type { SermonNoteFormValues } from '../components/SermonNoteForm';
 
 type Props = NativeStackScreenProps<HomeStackParamList, 'NewMessage'>;
 
-export function NewMessageScreen({ navigation }: Props) {
+export function NewMessageScreen({ navigation, route }: Props) {
   const [isSaving, setIsSaving] = React.useState(false);
+  const preSermon = route.params?.preSermon;
 
   const initialValues = React.useMemo<SermonNoteFormValues>(() => {
     const now = new Date();
     return {
       userName: '',
-      preacherName: '',
-      churchName: '',
+      preacherName: preSermon?.leader?.name ?? '',
+      churchName: preSermon?.church?.name ?? '',
       sermonDate: toDateOnly(now),
       sermonTime: '',
-      sermonTitle: '',
-      mainVerse: '',
-      secondaryVerses: [''],
+      sermonTitle: preSermon?.title ?? '',
+      mainVerse: preSermon?.mainVerse ?? '',
+      secondaryVerses: preSermon?.secondaryVerses && preSermon.secondaryVerses.length > 0 ? preSermon.secondaryVerses : [''],
       introduction: '',
       keyPoints: [{ id: createId(), title: '', content: '' }],
       highlightedPhrasesText: '',
@@ -32,7 +33,7 @@ export function NewMessageScreen({ navigation }: Props) {
       conclusion: '',
       finalSummary: ''
     };
-  }, []);
+  }, [preSermon]);
 
   async function handleSubmit(values: SermonNoteFormValues) {
     if (isSaving) return;
@@ -66,6 +67,7 @@ export function NewMessageScreen({ navigation }: Props) {
       practicalApplications: values.practicalApplications.trim() ? values.practicalApplications.trim() : undefined,
       conclusion: values.conclusion.trim() ? values.conclusion.trim() : undefined,
       finalSummary: values.finalSummary.trim() ? values.finalSummary.trim() : undefined,
+      preSermonCode: preSermon?.shareCode,
       favorite: false,
       createdAt,
       updatedAt: createdAt
@@ -84,7 +86,7 @@ export function NewMessageScreen({ navigation }: Props) {
 
   return (
     <ScreenLayout
-      title="Nova Mensagem"
+      title="Anotar Pregação"
       scroll
       rightHeader={
         <IconButton iconName="close" accessibilityLabel="Fechar" onPress={() => navigation.goBack()} />

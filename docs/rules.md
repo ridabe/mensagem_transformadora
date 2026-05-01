@@ -6,9 +6,9 @@ Este documento consolida as regras de negócio, comportamentos esperados e o des
 
 ## 1. Visão Geral e Princípios Fundamentais
 
-- **Offline-First Absoluto**: O aplicativo não depende de conexão com a internet. Não há backend, APIs de terceiros, autenticação em nuvem ou sincronização online.
+- **Offline-First com suporte opcional a pré-sermão**: O aplicativo funciona localmente sem conexão. Existe um fluxo opcional para carregar dados iniciais de um pré-sermão via código, sem exigir login.
 - **Armazenamento Local**: Todos os dados gerados pelo usuário são salvos localmente utilizando o banco de dados relacional (SQLite) no próprio dispositivo.
-- **Privacidade**: Como não há tráfego de rede, os dados do usuário pertencem exclusivamente ao usuário e permanecem em seu aparelho.
+- **Privacidade**: Os dados do usuário pertencem exclusivamente ao usuário e permanecem em seu aparelho. O carregamento por código só preenche o formulário, não salva nada automaticamente.
 - **Foco e Limpeza**: A interface deve ser intuitiva, direta e livre de distrações, com ações claras e contrastes padronizados.
 
 ---
@@ -21,6 +21,7 @@ A entidade central do sistema é a **Anotação de Pregação** (Sermon Note), c
 - **Nome do Usuário**: Obrigatório. Identifica o autor da anotação.
 - **Nome do Pregador**: Obrigatório. Quem ministrou a mensagem.
 - **Nome da Igreja**: Obrigatório. Local onde a mensagem foi ministrada.
+- **Código do Pré-Sermão**: Opcional. Se disponível, o app deve manter o `preSermonCode` no registro local para referência.
 - **Data**: Obrigatória (padrão YYYY-MM-DD). Inserida automaticamente na criação, editável se necessário.
 - **Horário**: Opcional (HH:MM).
 - **Título da Pregação**: Obrigatório. Tema central da mensagem.
@@ -52,6 +53,9 @@ A entidade central do sistema é a **Anotação de Pregação** (Sermon Note), c
 ### F02. Gestão de Anotações (CRUD)
 - **Criar (Nova Mensagem)**:
   - O usuário deve preencher obrigatoriamente os campos de cabeçalho.
+  - Ao tocar em **Anotar Pregação**, o usuário deve escolher entre criar do zero ou carregar um pré-sermão com código MT-XXXXX.
+  - Se o usuário optar por carregar o código, o app deve abrir uma tela para digitar o código, validar e chamar a API pública.
+  - O carregamento por código deve preencher os campos iniciais, permitir edição e não salvar automaticamente.
   - Os campos dinâmicos (Pontos Principais e Versículos Secundários) devem permitir adição e remoção livre.
   - A data de criação (`createdAt`) e atualização (`updatedAt`) são geradas pelo sistema.
 - **Visualizar (Detalhes)**:

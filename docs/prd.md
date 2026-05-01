@@ -50,6 +50,7 @@ o usuário deve poder gerar um resumo final
 o usuário deve poder exportar a anotação em PDF
 o usuário deve poder favoritar e duplicar anotações
 o usuário deve ter métricas locais (dashboard) sem internet
+o usuário deve poder iniciar uma anotação a partir de um código de pré-sermão fornecido pelo pregador, sem exigir login
 1.7 Funcionalidades principais
 F1. Início (porta de entrada)
 
@@ -58,6 +59,13 @@ F1. Início (porta de entrada)
 - Acesso rápido ao histórico completo e à tela “Sobre”.
 
 F2. Criar nova anotação de pregação
+
+- Ao tocar em “Anotar Pregação”, o usuário deve escolher entre:
+  - Criar do zero
+  - Carregar do código fornecido (MT-XXXXX)
+- Se escolher criar do zero, o fluxo atual deve ser mantido com todos os campos em branco.
+- Se escolher carregar do código, o app deve abrir uma tela para digitar o código, chamar a API pública e preencher os campos iniciais.
+- O usuário deve poder editar qualquer campo antes de salvar.
 
 Campos base:
 

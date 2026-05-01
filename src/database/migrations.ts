@@ -108,6 +108,14 @@ const migrations: Migration[] = [
       ALTER TABLE sermon_notes ADD COLUMN web_last_error TEXT;
       `
     ]
+  },
+  {
+    version: 4,
+    up: [
+      `
+      ALTER TABLE sermon_notes ADD COLUMN pre_sermon_code TEXT;
+      `
+    ]
   }
 ];
 

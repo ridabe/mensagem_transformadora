@@ -9,7 +9,8 @@ Este guia explica como usar cada tela do aplicativo **Mensagem Transformadora**.
 **Objetivo**: acesso rápido às principais ações e às últimas mensagens criadas.
 
 **Como usar**
-- Toque em **Nova mensagem** para criar uma nova anotação de pregação.
+- Toque em **Anotar Pregação** para iniciar uma nova mensagem.
+- No fluxo de criação, você pode escolher entre criar do zero ou carregar dados a partir do código fornecido pelo pregador.
 - Toque em **Ver histórico** para acessar a lista completa.
 - Em **Últimas mensagens**, toque em qualquer card para abrir os **Detalhes**.
 - No ícone de **informação (i)** no topo, acesse a tela **Sobre o Aplicativo**.
@@ -38,6 +39,12 @@ Este guia explica como usar cada tela do aplicativo **Mensagem Transformadora**.
 
 **Objetivo**: cadastrar uma nova anotação de pregação.
 
+**Fluxo de início**
+- Toque em **Anotar Pregação**.
+- Escolha entre:
+  - **Criar do zero**: abre o formulário com todos os campos vazios.
+  - **Carregar do código fornecido**: abre um campo para digitar o código MT-XXXXX e pré-carrega os dados iniciais.
+
 **Campos obrigatórios**
 - Nome do usuário
 - Nome do pregador
@@ -52,6 +59,13 @@ Este guia explica como usar cada tela do aplicativo **Mensagem Transformadora**.
 - Use **+ Adicionar** para inserir **pontos principais** (remova com o ícone de lixeira).
 - Em **Frases marcantes**, escreva **uma frase por linha**.
 - Toque em **Salvar**. Você será levado automaticamente para os **Detalhes** da mensagem recém-criada.
+
+**Carregar do código fornecido**
+- Digite o código informado pelo pregador no formato `MT-XXXXX`.
+- O app aceita variações como `mt-k8f3q`, `MTK8F3Q` ou com espaços e normaliza para o padrão.
+- Se o código for válido, o app busca os dados do pré-sermão e pré-preenche os campos iniciais.
+- Se ocorrer erro (código inválido, não encontrado ou falha de conexão), o app exibe uma mensagem clara.
+- Após carregar os dados, revise e salve normalmente.
 
 ---
 

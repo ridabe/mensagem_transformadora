@@ -17,6 +17,7 @@ export type SermonNote = {
   sermonTitle: string;
   mainVerse: string;
   secondaryVerses: string[];
+  preSermonCode?: string;
   introduction?: string;
   keyPoints: SermonPoint[];
   highlightedPhrases: string[];
