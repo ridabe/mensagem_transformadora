@@ -11,17 +11,23 @@ export type SharePdfParams = {
 };
 
 export async function shareHtmlAsPdf({ html, fileName = 'mensagem-transformadora.pdf' }: SharePdfParams): Promise<string> {
-  const { uri } = await Print.printToFileAsync({ html, base64: false });
+  try {
+    const { uri } = await Print.printToFileAsync({ html, base64: false });
+    console.log('PDF gerado com sucesso:', uri);
 
-  if (await Sharing.isAvailableAsync()) {
-    await Sharing.shareAsync(uri, {
-      mimeType: 'application/pdf',
-      dialogTitle: 'Compartilhar PDF',
-      UTI: 'com.adobe.pdf'
-    });
+    if (await Sharing.isAvailableAsync()) {
+      await Sharing.shareAsync(uri, {
+        mimeType: 'application/pdf',
+        dialogTitle: 'Compartilhar PDF',
+        UTI: 'com.adobe.pdf'
+      });
+    }
+
+    return uri;
+  } catch (error) {
+    console.error('Erro no shareHtmlAsPdf:', error);
+    throw error;
   }
-
-  return uri;
 }
 
 export async function shareSermonNoteAsPdf(note: SermonNote): Promise<string> {
@@ -32,14 +38,24 @@ export async function shareSermonNoteAsPdf(note: SermonNote): Promise<string> {
 }
 
 async function getLogoDataUri(): Promise<string> {
-  const asset = Asset.fromModule(require('../../img/logo.png'));
-  if (!asset.localUri) {
-    await asset.downloadAsync();
-  }
+  try {
+    const asset = Asset.fromModule(require('../../img/logo.png'));
+    console.log('Asset loaded:', asset);
+    if (!asset.localUri) {
+      console.log('Downloading asset...');
+      await asset.downloadAsync();
+    }
 
-  const uri = asset.localUri ?? asset.uri;
-  const base64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
-  return `data:image/png;base64,${base64}`;
+    const uri = asset.localUri ?? asset.uri;
+    console.log('URI:', uri);
+    const base64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
+    console.log('Base64 length:', base64.length);
+    return `data:image/png;base64,${base64}`;
+  } catch (error) {
+    console.error('Erro no getLogoDataUri:', error);
+    // Fallback: return empty string to avoid breaking PDF
+    return '';
+  }
 }
 
 function buildSermonPdfHtml(note: SermonNote, logoDataUri: string): string {
@@ -186,7 +202,7 @@ function buildSermonPdfHtml(note: SermonNote, logoDataUri: string): string {
       <div class="page">
         <div class="cover">
           <div class="brand">
-            <img class="logo" src="${logoDataUri}" />
+            ${logoDataUri ? `<img class="logo" src="${logoDataUri}" />` : ''}
             <div class="brand-name">Mensagem Transformadora</div>
           </div>
 

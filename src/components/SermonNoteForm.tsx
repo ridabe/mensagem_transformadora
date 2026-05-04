@@ -407,7 +407,7 @@ export function SermonNoteForm({
         <AppText variant="subtitle">Resumo final</AppText>
         <View style={styles.field}>
           <AppText variant="overline" style={styles.label}>
-            Opcional (pode ser gerado no Módulo 6)
+            Opcional
           </AppText>
           <TextInput
             value={finalSummary}

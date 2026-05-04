@@ -96,7 +96,8 @@ export function MessageDetailsScreen({ navigation, route }: Props) {
       setIsWorking(true);
       await shareSermonNoteAsPdf(note);
       requestPrompt('positive_action').catch(() => {});
-    } catch {
+    } catch (error) {
+      console.error('Erro ao gerar PDF:', error);
       Alert.alert('Erro', 'Não foi possível gerar o PDF.');
     } finally {
       setIsWorking(false);

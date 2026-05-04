@@ -36,7 +36,7 @@ export function AboutScreen({ navigation }: Props) {
           </AppText>
           <View style={styles.badge}>
             <AppText variant="caption" style={styles.badgeText}>
-              Versão 1.0.5
+              Versão 1.0.6
             </AppText>
           </View>
         </View>

@@ -7,12 +7,20 @@
       "distribution": "store",
       "android": {
         "buildType": "app-bundle"
+      },
+      "env": {
+        "EXPO_PUBLIC_DONATION_API_URL": "https://mensagem-transformadora-web.vercel.app",
+        "EXPO_PUBLIC_WEB_API_URL": "https://mensagem-transformadora-web.vercel.app"
       }
     },
     "preview": {
       "distribution": "internal",
       "android": {
         "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_DONATION_API_URL": "https://mensagem-transformadora-web.vercel.app",
+        "EXPO_PUBLIC_WEB_API_URL": "https://mensagem-transformadora-web.vercel.app"
       }
     }
   },
