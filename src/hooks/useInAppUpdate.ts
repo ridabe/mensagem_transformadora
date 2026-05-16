@@ -1,40 +1,43 @@
-import { useEffect } from 'react';
-import { Alert } from 'react-native';
-import InAppUpdates, {
-  IAUUpdateKind,
-  StatusUpdateEvent,
-  IAUInstallStatus,
-} from 'react-native-in-app-updates';
+import Constants from 'expo-constants';
+import { useEffect, useRef } from 'react';
+import { Alert, Linking } from 'react-native';
+
+const PLAY_STORE_URL =
+  'https://play.google.com/store/apps/details?id=com.algoritmum.msgt';
 
 export function useInAppUpdate() {
+  const checked = useRef(false);
+
   useEffect(() => {
-    InAppUpdates.checkNeedsUpdate()
-      .then((result) => {
-        if (!result.shouldUpdate) return;
+    if (checked.current) return;
+    checked.current = true;
 
-        InAppUpdates.addStatusUpdateListener(onStatusUpdate);
-        InAppUpdates.startUpdate({ updateType: IAUUpdateKind.FLEXIBLE });
-      })
-      .catch(() => {
-        // Silencia erros em builds de dev ou fora da Play Store
-      });
-
-    return () => {
-      InAppUpdates.removeStatusUpdateListener(onStatusUpdate);
-    };
+    checkForUpdate().catch(() => {});
   }, []);
 }
 
-function onStatusUpdate(event: StatusUpdateEvent) {
-  if (event.status === IAUInstallStatus.DOWNLOADED) {
+async function checkForUpdate() {
+  const currentCode = Constants.expoConfig?.android?.versionCode;
+  if (!currentCode) return;
+
+  const baseUrl = process.env.EXPO_PUBLIC_WEB_API_URL;
+  if (!baseUrl) return;
+
+  const response = await fetch(`${baseUrl}/api/app-version`, {
+    headers: { 'Cache-Control': 'no-cache' },
+  });
+  if (!response.ok) return;
+
+  const { versionCode } = (await response.json()) as { versionCode: number };
+  if (versionCode > currentCode) {
     Alert.alert(
-      'Atualização disponível',
-      'Uma nova versão foi baixada. Reinicie o app para aplicar.',
+      'Nova versão disponível',
+      'Há uma atualização do Mensagem Transformadora na Play Store. Deseja atualizar agora?',
       [
         { text: 'Agora não', style: 'cancel' },
         {
-          text: 'Reiniciar',
-          onPress: () => InAppUpdates.installUpdate(),
+          text: 'Atualizar',
+          onPress: () => Linking.openURL(PLAY_STORE_URL),
         },
       ]
     );
