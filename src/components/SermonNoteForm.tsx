@@ -4,6 +4,7 @@ import { Alert, LayoutAnimation, Platform, Pressable, StyleSheet, TextInput, UIM
 import { theme } from '../theme/theme';
 import { AppButton } from './AppButton';
 import { AppText } from './AppText';
+import { BibleVerseSelector } from './BibleVerseSelector';
 import { Card } from './Card';
 import { IconButton } from './IconButton';
 
@@ -201,12 +202,11 @@ export function SermonNoteForm({
           <AppText variant="overline" style={styles.label}>
             Versículo base *
           </AppText>
-          <TextInput
+          <BibleVerseSelector
             value={mainVerse}
-            onChangeText={setMainVerse}
-            style={styles.input}
-            placeholder="Ex.: João 3:16"
-            placeholderTextColor={placeholderTextColor}
+            onChange={setMainVerse}
+            placeholder="Selecionar versículo base"
+            disabled={isSubmitting}
           />
         </View>
 
@@ -215,29 +215,28 @@ export function SermonNoteForm({
             <AppText variant="overline" style={styles.label}>
               Versículos secundários
             </AppText>
-            {secondaryVerses.length <= 1 ? (
-              <Pressable
-                onPress={handleAddSecondaryVerse}
-                style={({ pressed }) => [styles.inlineAction, pressed ? styles.inlineActionPressed : null]}
-                disabled={isSubmitting}
-              >
-                <AppText variant="caption" style={styles.inlineActionText}>
-                  + Adicionar
-                </AppText>
-              </Pressable>
-            ) : null}
+            <Pressable
+              onPress={handleAddSecondaryVerse}
+              style={({ pressed }) => [styles.inlineAction, pressed ? styles.inlineActionPressed : null]}
+              disabled={isSubmitting}
+            >
+              <AppText variant="caption" style={styles.inlineActionText}>
+                + Adicionar
+              </AppText>
+            </Pressable>
           </View>
 
           <View style={styles.dynamicStack}>
             {secondaryVerses.map((value, index) => (
               <View key={`verse-${index}`} style={styles.dynamicRow}>
-                <TextInput
-                  value={value}
-                  onChangeText={(text) => setSecondaryVerses((prev) => prev.map((v, i) => (i === index ? text : v)))}
-                  style={[styles.input, styles.dynamicInput]}
-                  placeholder={`Versículo ${index + 1}`}
-                  placeholderTextColor={placeholderTextColor}
-                />
+                <View style={styles.dynamicInput}>
+                  <BibleVerseSelector
+                    value={value}
+                    onChange={(text) => setSecondaryVerses((prev) => prev.map((v, i) => (i === index ? text : v)))}
+                    placeholder={`Versículo ${index + 1}`}
+                    disabled={isSubmitting}
+                  />
+                </View>
                 <IconButton
                   iconName="delete"
                   accessibilityLabel="Remover versículo"
@@ -249,19 +248,6 @@ export function SermonNoteForm({
                 />
               </View>
             ))}
-            {secondaryVerses.length > 1 ? (
-              <View style={styles.secondaryAddFooter}>
-                <Pressable
-                  onPress={handleAddSecondaryVerse}
-                  style={({ pressed }) => [styles.inlineAction, pressed ? styles.inlineActionPressed : null]}
-                  disabled={isSubmitting}
-                >
-                  <AppText variant="caption" style={styles.inlineActionText}>
-                    + Adicionar
-                  </AppText>
-                </Pressable>
-              </View>
-            ) : null}
           </View>
         </View>
       </Card>

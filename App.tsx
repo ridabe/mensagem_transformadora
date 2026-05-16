@@ -7,6 +7,7 @@ import { DonationModal } from './src/components';
 import { PremiumSplashOverlay } from './src/components/PremiumSplashOverlay';
 import { initializeDatabase } from './src/database/migrations';
 import { useDonationGate } from './src/hooks/useDonationGate';
+import { useInAppUpdate } from './src/hooks/useInAppUpdate';
 import { RootNavigator } from './src/navigation/RootNavigator';
 import { reviewService } from './src/services/review/reviewService';
 import { navigationTheme } from './src/theme/navigationTheme';
@@ -18,6 +19,7 @@ export default function App() {
   const [showPremiumSplash, setShowPremiumSplash] = React.useState(true);
   const readyRef = React.useRef(false);
   const { shouldShowDonation, closeDonation, declineDonation, markAsPaid } = useDonationGate();
+  useInAppUpdate();
 
   React.useEffect(() => {
     reviewService.registerFirstAppOpen().catch(() => {});
@@ -62,7 +64,7 @@ export default function App() {
 
   return (
     <NavigationContainer theme={navigationTheme}>
-      <StatusBar style={showPremiumSplash ? 'light' : 'auto'} />
+      <StatusBar style={showPremiumSplash ? 'light' : 'dark'} />
       {ready ? <RootNavigator /> : null}
       <DonationModal
         visible={ready && !showPremiumSplash && shouldShowDonation}

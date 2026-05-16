@@ -2,15 +2,16 @@
   "expo": {
     "name": "Mensagem Transformadora",
     "slug": "mensagem-transformadora",
-    "version": "1.0.6",
+    "version": "1.0.8",
     "icon": "./img/icon.png",
-    "orientation": "portrait",
+    "orientation": "default",
     "platforms": [
       "android"
     ],
     "android": {
       "package": "com.algoritmum.msgt",
-      "versionCode": 6,
+      "versionCode": 8,
+      "edgeToEdge": true,
       "adaptiveIcon": {
         "foregroundImage": "./img/adaptive-icon.png",
         "backgroundColor": "#071A3A"
@@ -24,11 +25,6 @@
             "DEFAULT"
           ],
           "data": [
-            {
-              "scheme": "https",
-              "host": "mensagemtransformadora.com.br",
-              "pathPrefix": "/"
-            },
             {
               "scheme": "https",
               "host": "www.mensagemtransformadora.com.br",
@@ -46,10 +42,6 @@
       "image": "./img/logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#071A3A"
-    },
-    "androidStatusBar": {
-      "backgroundColor": "#071A3A",
-      "barStyle": "light-content"
     },
     "plugins": [
       "expo-asset",

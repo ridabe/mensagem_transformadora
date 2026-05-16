@@ -1,4 +1,5 @@
 export { AppButton } from './AppButton';
+export { BibleVerseSelector } from './BibleVerseSelector';
 export { AppHeader } from './AppHeader';
 export { AppText } from './AppText';
 export { Card } from './Card';
